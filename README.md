@@ -19,11 +19,9 @@ Clone the repo, or click and run `sudo sh run.sh` in the directory.  Wait a whil
 
 Follow its instructions, and start runnin them games! (warning, socket.bc18map may be buggy rn)
 
-### Windows 10 Pro instructions
+### Windows 10 Pro
 
 Windows 10 Professional or Enterprise: install https://www.docker.com/docker-windows
-
-Windows 10 Home, Windows 8, Windows 7: install https://docs.docker.com/toolbox/toolbox_install_windows/
 
 double click run.cmd
 
@@ -31,27 +29,47 @@ wait a while
 
 When you get the message: `To play games open http://localhost:6147/run.html in your browser` you're good to go!
 
-### Docker Toolbox Install Instructions
+### Windows 7, 8, 10 Home
 
-If you are running Windows 10 Home, Windows 8, or Windows 7, you must install Docker Toolbox in order to run the game.
+First, install Docker Toolbox: https://docs.docker.com/toolbox/toolbox_install_windows/
 
-Docker Toolbox can be installed from here: https://docs.docker.com/toolbox/toolbox_install_windows/
+Download the executable and follow the wizard to install it. 
 
-After installation, navigate to the install directory of Docker Toolbox (Most likely located in "C:\Program Files\Docker Toolbox")
+Search for 'Docker Quickstart Terminal' and open it. Do not open it twice, because multiple running copies do not work properly.
 
-Double-click the file labelled "start.sh"
+Wait a few minutes. You will see a picture of a whale when it finishes. Later, you will enter commands in this docker quickstart terminal, so don't close it.
 
-Docker Toolbox will boot, after a moment, you will be prompted with a colourful whale and a command line interface.
+Download the battlecode 2018 scaffold from https://github.com/battlecode/bc18-scaffold. You can use the green button to download the files and then manually unzip them, or you can clone the repository using Github if you're familiar with that. 
 
-Navigate to where your bc18-scaffold repository is located (Docker Toolbox is automatically started in your current User directory)
+Check that you have at least 2 GB of space available on your hard drive. You will need this much space for the docker install. 
 
-Type in "bash run.sh"
+In the quickstart terminal, navigate to the location of the unzipped files that you downloaded. You can navigate using 'cd' and 'ls'. For more information on navigating a file system with a unix terminal, see https://www.digitalocean.com/community/tutorials/basic-linux-navigation-and-file-management. 
 
-The Battlecode server will initialize, after a few moments, you will be shown a prompt labelled `To play games open http://localhost:6147/run.html in your browser`. Do not actually go there; Docker will use a different IP than localhost by default.
+Once you have navigated to where your bc18-scaffold repository is located, type "bash run.sh" (then press enter) to start the battlecode server. The first time you run this command, it will take a while downloading the docker installation. 
 
-You can no longer input commands into Docker Toolbox, this is normal.
+The Battlecode server will initialize and you will see the prompt, `To play games open http://localhost:6147/run.html in your browser on Mac/Linux/WindowsPro, or http://192.168.99.100:6147/run.html on Windows10Home. `. Do not close the docker quickstart window. Go to the second url http://192.168.99.100:6147/run.html and you should see a website. You run Battlecode matches using this website graphical user interface (GUI). The docker quickstart window will not accept commands at this point; it is listening to the GUI. 
 
-Navigate to http://192.168.99.100:6147/run.html in your browser. This may be different depending on your configuration -- if this doesn't work, check the IP upon instantiating Docker Quickstart (you will see a line of the form `docker is configured to use...`).
+Run a test match using the GUI. Select "Run Game" at the lower right. Live player logs should appear on screen. When the match ends, the live logs will disappear and a message appears on the website indicating which player won. Also, a match file is produced. The default name of the match file is "replay.bc18". This file appears in the bc18-scaffold directory that has the run.sh file. 
+
+To see a visual representation of the match, you can load the match file using the viewer. First, let's download the viewer.
+
+Visit http://battlecode.org/#/materials/releases and select the "Windows" link under the bullet point, "Download the Viewer". 
+
+Unzip the file you downloaded.
+
+Before running the viewer, reduce your system volume to a reasonable level. The viewer plays music. 
+
+Double-click clientWindows.exe. Select your choice of resolution. Windowed mode is convenient for running next to your code. Once you have configured the player, click "Play!"
+
+Now load the match file by selecting the icon with three bars at the top of the screen. Navigate to the bc18-scaffold directory, where the replay.bc18 file is stored. Then click the file, and at the bottom of the window click "Select". Now the replay file is loaded, so start the replay running using the triangle button in the top left. You can zoom out with the mouse scroll wheel, and pan left/right/up/down with the arrow keys. 
+
+### Writing your own bot
+
+To get started with your bot you can modify one of the examplefuncs-players located in the bc18-scaffold directory. You can modify the run.py for python, the main.c for c, and player.java file for java. Then use the web interface to queue a game as before.
+
+Players are named after the directory where they are located. For example, the player "examplesfuncplayer-python" corresponds to the folder where the python code is located. 
+
+You can create a new player by copying the examplefuncsplayer and then renaming the folder. The website interface can't see your new folder until you refresh the website. Select the website and press F5 or ctrl+r. Your new bot will then appear in the dropdown menu. 
 
 #### FAQ (for Docker Toolbox):
 1. How do I play a game?
