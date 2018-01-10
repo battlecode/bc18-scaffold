@@ -19,7 +19,7 @@ Clone the repo, or click and run `sudo sh run.sh` in the directory.  Wait a whil
 
 Follow its instructions, and start runnin them games! (warning, socket.bc18map may be buggy rn)
 
-### Windows instructions
+### Windows 10 Pro instructions
 
 Windows 10 Professional or Enterprise: install https://www.docker.com/docker-windows
 
@@ -30,3 +30,25 @@ double click run.cmd
 wait a while
 
 When you get the message: `To play games open http://localhost:6147/run.html in your browser` you're good to go!
+
+### Docker Toolbox Install Instructions
+
+If you are running Windows 10 Home, Windows 8, or Windows 7, you must install Docker Toolbox in order to run the game.
+
+Docker Toolbox can be installed from here: https://docs.docker.com/toolbox/toolbox_install_windows/
+
+After installation, navigate to the install directory of Docker Toolbox (Most likely located in "C:\Program Files\Docker Toolbox")
+
+Double-click the file labelled "start.sh"
+
+Docker Toolbox will boot, after a moment, you will be prompted with a colourful whale and a command line interface.
+
+Navigate to where your bc18-scaffold repository is located (Docker Toolbox is automatically started in your current User directory)
+
+Type in "bash run.sh"
+
+The Battlecode server will initialize, after a few moments, you will be shown a prompt labelled `To play games open http://localhost:6147/run.html in your browser`
+
+You can no longer input commands into Docker Toolbox, this is normal.
+
+Navigate to http://192.168.99.100:6147/run.html in your browser.
