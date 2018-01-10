@@ -75,3 +75,22 @@ Navigate to http://192.168.99.100:6147/run.html in your browser. This may be dif
 5. The Python example bot explodes!
 
  There is currently an API bug tied to building blueprints. If you avoid `gc.blueprint()` then you should be fine for the time being.
+ 
+6. Docker is taking up too much memory! / I get out of memory errors when running `run.sh`!
+
+ Docker saves some information between runs called images, containers, and volumes. Unchecked, these can quickly take over many gigs of storage. Occasionally, run the following 4 lines:
+
+ `docker stop $(docker ps -q)`
+`docker container rm $(docker container ls -aq)`
+`docker volume rm $(docker volume ls -q)$`
+`docker volume prune`
+
+ which should free up a lot of space.
+
+7. I get a 'We dun goof no map found' error!
+
+ Ignore it. This should happen when using the test map.
+
+8. I don't see any players/maps in the dropdown and/or my console says that `/player` can't be found!
+
+ This one is pretty tricky to track down. Try looking at your `run.sh` file and changing `/players` to `/player` if necessary. You can also try running the `pwd` command in your scaffold directory and replacing `$PWD` in `run.sh` with that absolute path. Additionally make sure your filepath doesn't contain any spaces, special characters, etc. that may confuse the parser.
