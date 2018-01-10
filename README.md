@@ -94,3 +94,7 @@ Navigate to http://192.168.99.100:6147/run.html in your browser. This may be dif
 8. I don't see any players/maps in the dropdown and/or my console says that `/player` can't be found!
 
  This one is pretty tricky to track down. Try looking at your `run.sh` file and changing `/players` to `/player` if necessary. You can also try running the `pwd` command in your scaffold directory and replacing `$PWD` in `run.sh` with that absolute path. Additionally make sure your filepath doesn't contain any spaces, special characters, etc. that may confuse the parser.
+ 
+9. The Python bot crashes with an error of the form `can't open file run.py`!
+
+ The issue is most likely that you are using Windows line endings (\r\n) rather than Unix line endings (\n) which confuses the shell script and gives some silly error. To fix this, make sure to convert all your `run.sh` files to Unix format before running a game. You can accomplish this with an editor like Notepad++ (Edit -> EOL Conversion -> Unix/OSX Format) or the `dos2unix` command line tool (e.g. `dos2unix */run.sh`).
