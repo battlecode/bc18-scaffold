@@ -71,6 +71,12 @@ Players are named after the directory where they are located. For example, the p
 
 You can create a new player by copying the examplefuncsplayer and then renaming the folder. The website interface can't see your new folder until you refresh the website. Select the website and press F5 or ctrl+r. Your new bot will then appear in the dropdown menu. 
 
+### Check for the latest release
+
+We update the Battlecode game occasionally. Docker should automatically run using the latest version of the Battlecode game. You can manually update to the latest version by entering the following command in the docker quickstart terminal:
+
+docker pull battlecode/battlecode-2018
+
 #### FAQ (for Docker Toolbox):
 1. How do I play a game?
 
