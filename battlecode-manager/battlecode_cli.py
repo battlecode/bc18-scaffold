@@ -1,4 +1,5 @@
 '''
+t
 This file contains contains the CLI that starts games up
 '''
 
@@ -9,7 +10,10 @@ import logging
 from sandbox import Sandbox, NoSandbox
 import server
 import battlecode as bc
-import ujson as json
+try:
+    import ujson as json
+except:
+    import json
 import io
 import sys
 
