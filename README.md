@@ -11,7 +11,7 @@ Download the most recent version of this repository (see the green Download butt
 
 Unfortunately, since we don't have docker we'll have to install some other things.
 
-Note that if you are copying over an old game (that used to run in docker), you HAVE to copy the new run.sh and run.bat files for your language from the correct examplefuncsplayer folder. Your code will continue to work *inside* docker, but will not work outside of it without the new run.sh and run.bat files.
+Note that if you are copying over an old player (that used to run in docker), you HAVE to copy the new run.sh and run.bat files for your language from the correct examplefuncsplayer folder. Your code will continue to work *inside* docker, but will not work outside of it without the new run.sh and run.bat files.
 
 ### Windows
 First, install Python 3.6 64 bit. If you have a python 3 install but it isn't 64 bit this won't work.
@@ -22,7 +22,7 @@ MAKE SURE you click "Add Python 3.6 to my Path".
 
 Now, start a command prompt (search `cmd` in the start menu) and run:
 ```sh
-python3 -c "import sys; print(sys.version)"
+py -3 -c "import sys; print(sys.version)"
 ```
 If you get output that looks something like:
 ```
@@ -37,6 +37,23 @@ Now, go to wherever you downloaded this repo and run the run_nodocker.bat script
 It should install a few other things and then quickly start up!
 Go to the link in the terminal and run a game or two.
 NOTE: Currently, ONLY PYTHON works outside docker on windows. This will be fixed as soon as we figure out how to get the other languages linking correctly. Just stick with Python for now :)
+
+## ERRORS
+if you get:
+
+`ModuleNotFoundError: No module named cffi_backend`
+
+Or:
+
+`%1 is not a valid Win32 program`
+
+You need to uninstall python 3 32-bit, install 64 bit, and run:
+```
+py -3 -m pip uninstall cffi eel greenlet tqdm werkzeug psutil pycparser gevent greenlet bottle bottle-websocket
+```
+
+Before re-running `run_nodocker.bat`.
+
 
 ### Mac
 
