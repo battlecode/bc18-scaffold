@@ -1,0 +1,1478 @@
+Module bc
+---------
+Battlecode engine.
+
+Woo.
+
+Functions
+---------
+game_turns()
+    Usage:
+    for controller in game_turns():
+        #controller is a GameController; do things with it
+        print(controller.round)
+
+Classes
+-------
+AsteroidPattern 
+    Ancestors (in MRO)
+    ------------------
+    bc.AsteroidPattern
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: AsteroidPattern
+        :rtype: AsteroidPattern
+
+    clone(self)
+        Deep-copy a AsteroidPattern
+        :type self: AsteroidPattern
+        :rtype: AsteroidPattern
+
+    from_json(s)
+        Deserialize a AsteroidPattern from a JSON string
+        :type s: str
+        :rtype: AsteroidPattern
+
+    to_json(self)
+        Serialize a AsteroidPattern to a JSON string
+        :type self: AsteroidPattern
+        :rtype: str
+
+AsteroidStrike 
+    Ancestors (in MRO)
+    ------------------
+    bc.AsteroidStrike
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self, karbonite, location)
+        :type self: AsteroidStrike
+        :type karbonite: int
+        :type location: MapLocation
+        :rtype: AsteroidStrike
+
+    clone(self)
+        Deep-copy a AsteroidStrike
+        :type self: AsteroidStrike
+        :rtype: AsteroidStrike
+
+    from_json(s)
+        Deserialize a AsteroidStrike from a JSON string
+        :type s: str
+        :rtype: AsteroidStrike
+
+    to_json(self)
+        Serialize a AsteroidStrike to a JSON string
+        :type self: AsteroidStrike
+        :rtype: str
+
+    Instance variables
+    ------------------
+    karbonite
+        :type self: AsteroidStrike
+        :rtype: int
+
+    location
+        :type self: AsteroidStrike
+        :rtype: MapLocation
+
+Delta 
+    Ancestors (in MRO)
+    ------------------
+    bc.Delta
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: Delta
+        :rtype: Delta
+
+    from_json(s)
+        Deserialize a Delta from a JSON string
+        :type s: str
+        :rtype: Delta
+
+    to_json(self)
+        Serialize a Delta to a JSON string
+        :type self: Delta
+        :rtype: str
+
+Direction 
+    An enumeration.
+
+    Ancestors (in MRO)
+    ------------------
+    bc.Direction
+    enum.IntEnum
+    builtins.int
+    enum.Enum
+    builtins.object
+
+    Class variables
+    ---------------
+    Center
+
+    East
+
+    North
+
+    Northeast
+
+    Northwest
+
+    South
+
+    Southeast
+
+    Southwest
+
+    West
+
+ErrorMessage 
+    Ancestors (in MRO)
+    ------------------
+    bc.ErrorMessage
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: ErrorMessage
+        :rtype: ErrorMessage
+
+    from_json(s)
+        Deserialize a ErrorMessage from a JSON string
+        :type s: str
+        :rtype: ErrorMessage
+
+    to_json(self)
+        Serialize a ErrorMessage to a JSON string
+        :type self: ErrorMessage
+        :rtype: str
+
+    Instance variables
+    ------------------
+    error
+        :type self: ErrorMessage
+        :rtype: str
+
+GameController 
+    Ancestors (in MRO)
+    ------------------
+    bc.GameController
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        Use environment variables to connect to the manager.
+        :type self: GameController
+        :rtype: GameController
+
+    apply_turn(self, turn)
+        :type self: GameController
+        :type turn: TurnMessage
+        :rtype: TurnApplication
+
+    asteroid_pattern(self)
+        The asteroid strike pattern on Mars.
+
+        :type self: GameController
+        :rtype: AsteroidPattern
+
+    attack(self, robot_id, target_unit_id)
+        Attacks the robot, dealing the unit's standard amount of damage.
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is a healer, or not a robot.
+        * GameError::InvalidAction - the robot cannot attack that location.
+
+        :type self: GameController
+        :type robot_id: int
+        :type target_unit_id: int
+        :rtype: None
+
+    begin_snipe(self, ranger_id, location)
+        Begins the countdown to snipe a given location. Maximizes the units
+        attack and movement heats until the ranger has sniped. The ranger may
+        begin the countdown at any time, including resetting the countdown
+        to snipe a different location.
+
+        * GameError::InvalidResearchLevel - the ability has not been researched.
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is not a ranger.
+        * GameError::InvalidLocation - the location is off the map or on a different planet.
+
+        :type self: GameController
+        :type ranger_id: int
+        :type location: MapLocation
+        :rtype: None
+
+    blink(self, mage_id, location)
+        Blinks the mage to the given location.
+        * GameError::InvalidResearchLevel - the ability has not been researched.
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is not a mage.
+        * GameError::InvalidAction - the mage cannot blink to that location.
+
+        :type self: GameController
+        :type mage_id: int
+        :type location: MapLocation
+        :rtype: None
+
+    blueprint(self, worker_id, structure_type, direction)
+        Blueprints a unit of the given type in the given direction. Subtract
+        cost of that unit from the team's resource pool.
+
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is not a worker, or the
+          unit type is not a factory or rocket.
+        * GameError::InvalidLocation - the location is off the map.
+        * GameError::InvalidAction - the worker is not ready to blueprint.
+
+        :type self: GameController
+        :type worker_id: int
+        :type structure_type: UnitType
+        :type direction: Direction
+        :rtype: None
+
+    build(self, worker_id, blueprint_id)
+        Builds a given blueprint, increasing its health by the worker's build
+        amount. If raised to maximum health, the blueprint becomes a completed
+        structure.
+
+        * GameError::NoSuchUnit - a unit does not exist.
+        * GameError::TeamNotAllowed - a unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit or blueprint is the wrong type.
+        * GameError::InvalidAction - the worker cannot build the blueprint.
+
+        :type self: GameController
+        :type worker_id: int
+        :type blueprint_id: int
+        :rtype: None
+
+    can_attack(self, robot_id, target_unit_id)
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        Whether the robot can attack the given unit, without taking into
+        account the unit's attack heat. Takes into account only the unit's
+        attack range, and the location of the unit.
+
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is not a robot.
+        * GameError::InvalidAction - the robot cannot move in that direction.
+
+        :type self: GameController
+        :type robot_id: int
+        :type target_unit_id: int
+        :rtype: bool
+
+    can_blink(self, mage_id, location)
+        Whether the mage can blink to the given location, without taking into
+        account the mage's ability heat. Takes into account only the mage's
+        ability range, the map terrain, positions of other units, and the edge
+        of the game map.
+
+        :type self: GameController
+        :type mage_id: int
+        :type location: MapLocation
+        :rtype: bool
+
+    can_blueprint(self, worker_id, unit_type, direction)
+        Whether the worker can blueprint a unit of the given type. The worker
+        can only blueprint factories, and rockets if Rocketry has been
+        researched. The team must have sufficient karbonite in its resource
+        pool. The worker cannot already have performed an action this round.
+
+        :type self: GameController
+        :type worker_id: int
+        :type unit_type: UnitType
+        :type direction: Direction
+        :rtype: bool
+
+    can_build(self, worker_id, blueprint_id)
+        Whether the worker can build a blueprint with the given ID. The worker
+        and the blueprint must be adjacent to each other. The worker cannot
+        already have performed an action this round.
+
+        :type self: GameController
+        :type worker_id: int
+        :type blueprint_id: int
+        :rtype: bool
+
+    can_harvest(self, worker_id, direction)
+        Whether the worker is ready to harvest, and the given direction contains
+        karbonite to harvest. The worker cannot already have performed an action 
+        this round.
+
+        :type self: GameController
+        :type worker_id: int
+        :type direction: Direction
+        :rtype: bool
+
+    can_heal(self, healer_id, target_robot_id)
+        Whether the healer can heal the given robot, without taking into
+        account the healer's attack heat. Takes into account only the healer's
+        attack range, and the location of the robot.
+
+        :type self: GameController
+        :type healer_id: int
+        :type target_robot_id: int
+        :rtype: bool
+
+    can_javelin(self, knight_id, target_unit_id)
+        Whether the knight can javelin the given robot, without taking into
+        account the knight's ability heat. Takes into account only the knight's
+        ability range, and the location of the robot.
+
+        :type self: GameController
+        :type knight_id: int
+        :type target_unit_id: int
+        :rtype: bool
+
+    can_launch_rocket(self, rocket_id, destination)
+        W
+        hether the rocket can launch into space. The rocket can launch if the
+        it has never been used before.
+
+        :type self: GameController
+        :type rocket_id: int
+        :type destination: MapLocation
+        :rtype: bool
+
+    can_load(self, structure_id, robot_id)
+        Whether the robot can be loaded into the given structure's garrison. The robot
+        must be ready to move and must be adjacent to the structure. The structure
+        and the robot must be on the same team, and the structure must have space.
+
+        :type self: GameController
+        :type structure_id: int
+        :type robot_id: int
+        :rtype: bool
+
+    can_move(self, robot_id, direction)
+        Whether the robot can move in the given direction, without taking into
+        account the unit's movement heat. Takes into account only the map
+        terrain, positions of other robots, and the edge of the game map.
+
+        :type self: GameController
+        :type robot_id: int
+        :type direction: Direction
+        :rtype: bool
+
+    can_overcharge(self, healer_id, target_robot_id)
+        Whether the healer can overcharge the given robot, without taking into
+        account the healer's ability heat. Takes into account only the healer's
+        ability range, and the location of the robot.
+
+        :type self: GameController
+        :type healer_id: int
+        :type target_robot_id: int
+        :rtype: bool
+
+    can_produce_robot(self, factory_id, robot_type)
+        Whether the factory can produce a robot of the given type. The factory
+        must not currently be producing a robot, and the team must have
+        sufficient resources in its resource pool.
+
+        :type self: GameController
+        :type factory_id: int
+        :type robot_type: UnitType
+        :rtype: bool
+
+    can_repair(self, worker_id, structure_id)
+        Whether the given worker can repair the given strucutre. Tests that the worker
+        is able to execute a worker action, that the structure is built, and that the
+        structure is within range.
+
+        :type self: GameController
+        :type worker_id: int
+        :type structure_id: int
+        :rtype: bool
+
+    can_replicate(self, worker_id, direction)
+        Whether the worker is ready to replicate. Tests that the worker's
+        ability heat is sufficiently low, that the team has sufficient
+        karbonite in its resource pool, and that the square in the given
+        direction is empty.
+
+        :type self: GameController
+        :type worker_id: int
+        :type direction: Direction
+        :rtype: bool
+
+    can_sense_location(self, location)
+        Whether the location is within the vision range.
+
+        * GameError::InvalidLocation - the location is outside the vision range.
+
+        :type self: GameController
+        :type location: MapLocation
+        :rtype: bool
+
+    can_sense_unit(self, id)
+        Whether there is a unit with this ID within the vision range.
+
+        :type self: GameController
+        :type id: int
+        :rtype: bool
+
+    can_unload(self, structure_id, direction)
+        Tests whether the given structure is able to unload a unit in the
+        given direction. There must be space in that direction, and the unit
+        must be ready to move.
+
+        :type self: GameController
+        :type structure_id: int
+        :type direction: Direction
+        :rtype: bool
+
+    current_duration_of_flight(self)
+        The current duration of flight if a rocket were to be launched this
+        round. Does not take into account any research done on rockets.
+
+        :type self: GameController
+        :rtype: int
+
+    disintegrate_unit(self, unit_id)
+        Disintegrates the unit and removes it from the map. If the unit is a
+        factory or a rocket, also disintegrates any units garrisoned inside it.
+
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+
+        :type self: GameController
+        :type unit_id: int
+        :rtype: None
+
+    end_turn(self)
+        :type self: GameController
+        :rtype: TurnMessage
+
+    harvest(self, worker_id, direction)
+        Harvests up to the worker's harvest amount of karbonite from the given
+        location, adding it to the team's resource pool.
+
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is not a worker.
+        * GameError::InvalidLocation - the location is off the map.
+        * GameError::InvalidAction - the worker is not ready to harvest, or there is no karbonite.
+
+        :type self: GameController
+        :type worker_id: int
+        :type direction: Direction
+        :rtype: None
+
+    heal(self, healer_id, target_robot_id)
+        Heals the robot, dealing the healer's standard amount of "damage".
+        * GameError::NoSuchUnit - a unit does not exist.
+        * GameError::TeamNotAllowed - the first unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the healer or robot is not the right type.
+        * GameError::InvalidAction - the healer cannot heal that unit.
+
+        :type self: GameController
+        :type healer_id: int
+        :type target_robot_id: int
+        :rtype: None
+
+    initial_start_turn_message(self)
+        :type self: GameController
+        :rtype: InitialTurnApplication
+
+    is_attack_ready(self, robot_id)
+        Whether the robot is ready to attack. Tests whether the robot's attack
+        heat is sufficiently low.
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is a healer, or not a robot.
+
+        :type self: GameController
+        :type robot_id: int
+        :rtype: bool
+
+    is_blink_ready(self, mage_id)
+        Whether the mage is ready to blink. Tests whether the mage's ability
+        heat is sufficiently low.
+
+        * GameError::InvalidResearchLevel - the ability has not been researched.
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is not a mage.
+
+        :type self: GameController
+        :type mage_id: int
+        :rtype: bool
+
+    is_heal_ready(self, healer_id)
+        Whether the healer is ready to heal. Tests whether the healer's attack
+        heat is sufficiently low.
+
+        :type self: GameController
+        :type healer_id: int
+        :rtype: bool
+
+    is_javelin_ready(self, knight_id)
+        Whether the knight is ready to javelin. Tests whether the knight's
+        ability heat is sufficiently low.
+
+        :type self: GameController
+        :type knight_id: int
+        :rtype: bool
+
+    is_move_ready(self, robot_id)
+        Whether the robot is ready to move. Tests whether the robot's attack
+        heat is sufficiently low.
+
+        :type self: GameController
+        :type robot_id: int
+        :rtype: bool
+
+    is_occupiable(self, location)
+        Whether the location is clear for a unit to occupy, either by movement
+        or by construction.
+        * GameError::InvalidLocation - the location is outside the vision range.
+
+        :type self: GameController
+        :type location: MapLocation
+        :rtype: bool
+
+    is_over(self)
+        :type self: GameController
+        :rtype: bool
+
+    is_overcharge_ready(self, healer_id)
+        Whether the healer is ready to overcharge. Tests whether the healer's
+        ability heat is sufficiently low.
+
+        :type self: GameController
+        :type healer_id: int
+        :rtype: bool
+
+    javelin(self, knight_id, target_unit_id)
+        Javelins the robot, dealing the amount of ability damage.
+        * GameError::InvalidResearchLevel - the ability has not been researched.
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is not a knight.
+        * GameError::InvalidAction - the knight cannot javelin that unit.
+
+        :type self: GameController
+        :type knight_id: int
+        :type target_unit_id: int
+        :rtype: None
+
+    karbonite(self)
+        :type self: GameController
+        :rtype: int
+
+    karbonite_at(self, location)
+        The karbonite at the given location.
+
+        :type self: GameController
+        :type location: MapLocation
+        :rtype: int
+
+    launch_rocket(self, rocket_id, location)
+        Launches the rocket into space. If the destination is not on the map of
+        the other planet, the rocket flies off, never to be seen again.
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is not a rocket.
+        * GameError::InvalidAction - the rocket cannot launch.
+
+        :type self: GameController
+        :type rocket_id: int
+        :type location: MapLocation
+        :rtype: None
+
+    load(self, structure_id, robot_id)
+        Loads the robot into the garrison of the structure.
+        * GameError::NoSuchUnit - a unit does not exist.
+        * GameError::TeamNotAllowed - either unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the robot or structure are the wrong type.
+        * GameError::InvalidAction - the robot cannot be loaded inside the structure.
+
+        :type self: GameController
+        :type structure_id: int
+        :type robot_id: int
+        :rtype: None
+
+    move_robot(self, robot_id, direction)
+        Moves the robot in the given direction.
+        :type self: GameController
+        :type robot_id: int
+        :type direction: Direction
+        :rtype: None
+
+    new_manager(map)
+        :type map: GameMap
+        :rtype: GameController
+
+    new_player(game)
+        :type game: StartGameMessage
+        :rtype: GameController
+
+    next_turn(self)
+        Send the moves from the current turn and wait for the next turn.
+        :type self: GameController
+        :rtype: None
+
+    orbit_pattern(self)
+        The orbit pattern that determines a rocket's flight duration.
+
+        :type self: GameController
+        :rtype: OrbitPattern
+
+    overcharge(self, healer_id, target_robot_id)
+        Overcharges the robot, resetting the robot's cooldowns.
+        * GameError::InvalidResearchLevel - the ability has not been researched.
+        * GameError::NoSuchUnit - a unit does not exist.
+        * GameError::TeamNotAllowed - the first unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the healer or robot is not the right type.
+        * GameError::InvalidAction - the healer cannot overcharge that unit.
+
+        :type self: GameController
+        :type healer_id: int
+        :type target_robot_id: int
+        :rtype: None
+
+    planet(self)
+        :type self: GameController
+        :rtype: Planet
+
+    produce_robot(self, factory_id, robot_type)
+        Starts producing the robot of the given type.
+        * GameError::NoSuchUnit - the unit does not exist.
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is not a factory, or the
+          queued unit type is not a robot.
+        * GameError::InvalidAction - the factory cannot produce the robot.
+
+        :type self: GameController
+        :type factory_id: int
+        :type robot_type: UnitType
+        :rtype: None
+
+    queue_research(self, branch)
+        Adds a branch to the back of the queue, if it is a valid upgrade, and
+        starts research if it is the first in the queue.
+
+        Returns whether the branch was successfully added.
+
+        :type self: GameController
+        :type branch: UnitType
+        :rtype: bool
+
+    repair(self, worker_id, structure_id)
+        Commands the worker to repair a structure, repleneshing health to it. This
+        can only be done to structures which have been fully built.
+
+        :type self: GameController
+        :type worker_id: int
+        :type structure_id: int
+        :rtype: None
+
+    replicate(self, worker_id, direction)
+        Replicates a worker in the given direction. Subtracts the cost of the
+        worker from the team's resource pool.
+
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is not a worker.
+        * GameError::InvalidLocation - the location is off the map.
+        * GameError::InvalidAction - the worker is not ready to replicate.
+
+        :type self: GameController
+        :type worker_id: int
+        :type direction: Direction
+        :rtype: None
+
+    research_info(self)
+        The research info of the current team, including what branch is
+        currently being researched, the number of rounds left.
+
+        Note that mutating this object by resetting or queueing research
+        does not have any effect. You must call the mutators on world.
+
+        :type self: GameController
+        :rtype: ResearchInfo
+
+    reset_research(self)
+        Resets the research queue to be empty. Returns true if the queue was
+        not empty before, and false otherwise.
+
+        :type self: GameController
+        :rtype: bool
+
+    rocket_landings(self)
+        The landing rounds and locations of rockets in space that belong to the
+        current team.
+        Note that mutating this object does NOT have any effect on the actual
+        game. You MUST call the mutators in world!!
+
+        :type self: GameController
+        :rtype: RocketLandingInfo
+
+    round(self)
+        :type self: GameController
+        :rtype: int
+
+    start_game(self, player)
+        :type self: GameController
+        :type player: Player
+        :rtype: StartGameMessage
+
+    start_turn(self, turn)
+        :type self: GameController
+        :type turn: StartTurnMessage
+        :rtype: None
+
+    team(self)
+        :type self: GameController
+        :rtype: Team
+
+    unload(self, structure_id, direction)
+        Unloads a robot from the garrison of the specified structure into an 
+        adjacent space. Robots are unloaded in the order they were loaded.
+
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is not a structure.
+        * GameError::InvalidLocation - the location is off the map.
+        * GameError::InvalidAction - the rocket cannot degarrison a unit.
+
+        :type self: GameController
+        :type structure_id: int
+        :type direction: Direction
+        :rtype: None
+
+    winning_team(self)
+        :type self: GameController
+        :rtype: Team
+
+    write_team_array(self, index, value)
+        Writes the value at the index of this planet's team array.
+        * GameError::ArrayOutOfBounds - the index of the array is out of
+          bounds. It must be within [0, COMMUNICATION_ARRAY_LENGTH).
+
+        :type self: GameController
+        :type index: int
+        :type value: int
+        :rtype: None
+
+GameMap 
+    Ancestors (in MRO)
+    ------------------
+    bc.GameMap
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: GameMap
+        :rtype: GameMap
+
+    clone(self)
+        Deep-copy a GameMap
+        :type self: GameMap
+        :rtype: GameMap
+
+    from_json(s)
+        Deserialize a GameMap from a JSON string
+        :type s: str
+        :rtype: GameMap
+
+    test_map()
+        :rtype: GameMap
+
+    to_json(self)
+        Serialize a GameMap to a JSON string
+        :type self: GameMap
+        :rtype: str
+
+InitialTurnApplication 
+    Ancestors (in MRO)
+    ------------------
+    bc.InitialTurnApplication
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: InitialTurnApplication
+        :rtype: InitialTurnApplication
+
+    Instance variables
+    ------------------
+    start_turn
+        :type self: InitialTurnApplication
+        :rtype: StartTurnMessage
+
+    viewer
+        :type self: InitialTurnApplication
+        :rtype: ViewerKeyframe
+
+Location 
+    Ancestors (in MRO)
+    ------------------
+    bc.Location
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: Location
+        :rtype: Location
+
+    clone(self)
+        Deep-copy a Location
+        :type self: Location
+        :rtype: Location
+
+    from_json(s)
+        Deserialize a Location from a JSON string
+        :type s: str
+        :rtype: Location
+
+    to_json(self)
+        Serialize a Location to a JSON string
+        :type self: Location
+        :rtype: str
+
+MapLocation 
+    Ancestors (in MRO)
+    ------------------
+    bc.MapLocation
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self, planet, x, y)
+        Create a new MapLocation.
+        :type self: MapLocation
+        :type planet: Planet
+        :type x: int
+        :type y: int
+        :rtype: MapLocation
+
+    add(self, direction)
+        :type self: MapLocation
+        :type direction: Direction
+        :rtype: MapLocation
+
+    clone(self)
+        Deep-copy a MapLocation
+        :type self: MapLocation
+        :rtype: MapLocation
+
+    from_json(s)
+        Deserialize a MapLocation from a JSON string
+        :type s: str
+        :rtype: MapLocation
+
+    to_json(self)
+        Serialize a MapLocation to a JSON string
+        :type self: MapLocation
+        :rtype: str
+
+    Instance variables
+    ------------------
+    planet
+        The planet lol.
+        :type self: MapLocation
+        :rtype: Planet
+
+    x
+        The x coordinate of the map location.
+        :type self: MapLocation
+        :rtype: int
+
+    y
+        The y coordinate of the map location.
+        :type self: MapLocation
+        :rtype: int
+
+OrbitPattern 
+    Ancestors (in MRO)
+    ------------------
+    bc.OrbitPattern
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: OrbitPattern
+        :rtype: OrbitPattern
+
+    from_json(s)
+        Deserialize a OrbitPattern from a JSON string
+        :type s: str
+        :rtype: OrbitPattern
+
+    to_json(self)
+        Serialize a OrbitPattern to a JSON string
+        :type self: OrbitPattern
+        :rtype: str
+
+    Instance variables
+    ------------------
+    amplitude
+        :type self: OrbitPattern
+        :rtype: int
+
+    center
+        :type self: OrbitPattern
+        :rtype: int
+
+    period
+        :type self: OrbitPattern
+        :rtype: int
+
+Planet 
+    An enumeration.
+
+    Ancestors (in MRO)
+    ------------------
+    bc.Planet
+    enum.IntEnum
+    builtins.int
+    enum.Enum
+    builtins.object
+
+    Class variables
+    ---------------
+    Earth
+
+    Mars
+
+Player 
+    Ancestors (in MRO)
+    ------------------
+    bc.Player
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self, team, planet)
+        :type self: Player
+        :type team: Team
+        :type planet: Planet
+        :rtype: Player
+
+    clone(self)
+        Deep-copy a Player
+        :type self: Player
+        :rtype: Player
+
+    from_json(s)
+        Deserialize a Player from a JSON string
+        :type s: str
+        :rtype: Player
+
+    to_json(self)
+        Serialize a Player to a JSON string
+        :type self: Player
+        :rtype: str
+
+    Instance variables
+    ------------------
+    planet
+        :type self: Player
+        :rtype: Planet
+
+    team
+        :type self: Player
+        :rtype: Team
+
+ResearchInfo 
+    Ancestors (in MRO)
+    ------------------
+    bc.ResearchInfo
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: ResearchInfo
+        :rtype: ResearchInfo
+
+RocketLanding 
+    Ancestors (in MRO)
+    ------------------
+    bc.RocketLanding
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self, rocket_id, destination)
+        :type self: RocketLanding
+        :type rocket_id: int
+        :type destination: MapLocation
+        :rtype: RocketLanding
+
+    clone(self)
+        Deep-copy a RocketLanding
+        :type self: RocketLanding
+        :rtype: RocketLanding
+
+    from_json(s)
+        Deserialize a RocketLanding from a JSON string
+        :type s: str
+        :rtype: RocketLanding
+
+    to_json(self)
+        Serialize a RocketLanding to a JSON string
+        :type self: RocketLanding
+        :rtype: str
+
+    Instance variables
+    ------------------
+    destination
+        :type self: RocketLanding
+        :rtype: MapLocation
+
+    rocket_id
+        :type self: RocketLanding
+        :rtype: int
+
+RocketLandingInfo 
+    Ancestors (in MRO)
+    ------------------
+    bc.RocketLandingInfo
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: RocketLandingInfo
+        :rtype: RocketLandingInfo
+
+StartGameMessage 
+    Ancestors (in MRO)
+    ------------------
+    bc.StartGameMessage
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: StartGameMessage
+        :rtype: StartGameMessage
+
+    from_json(s)
+        Deserialize a StartGameMessage from a JSON string
+        :type s: str
+        :rtype: StartGameMessage
+
+    to_json(self)
+        Serialize a StartGameMessage to a JSON string
+        :type self: StartGameMessage
+        :rtype: str
+
+StartTurnMessage 
+    Ancestors (in MRO)
+    ------------------
+    bc.StartTurnMessage
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: StartTurnMessage
+        :rtype: StartTurnMessage
+
+    from_json(s)
+        Deserialize a StartTurnMessage from a JSON string
+        :type s: str
+        :rtype: StartTurnMessage
+
+    to_json(self)
+        Serialize a StartTurnMessage to a JSON string
+        :type self: StartTurnMessage
+        :rtype: str
+
+    Instance variables
+    ------------------
+    round
+        :type self: StartTurnMessage
+        :rtype: int
+
+Team 
+    An enumeration.
+
+    Ancestors (in MRO)
+    ------------------
+    bc.Team
+    enum.IntEnum
+    builtins.int
+    enum.Enum
+    builtins.object
+
+    Class variables
+    ---------------
+    Blue
+
+    Red
+
+TurnApplication 
+    Ancestors (in MRO)
+    ------------------
+    bc.TurnApplication
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: TurnApplication
+        :rtype: TurnApplication
+
+    Instance variables
+    ------------------
+    start_turn
+        :type self: TurnApplication
+        :rtype: StartTurnMessage
+
+    viewer
+        :type self: TurnApplication
+        :rtype: ViewerMessage
+
+TurnMessage 
+    Ancestors (in MRO)
+    ------------------
+    bc.TurnMessage
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: TurnMessage
+        :rtype: TurnMessage
+
+    from_json(s)
+        Deserialize a TurnMessage from a JSON string
+        :type s: str
+        :rtype: TurnMessage
+
+    to_json(self)
+        Serialize a TurnMessage to a JSON string
+        :type self: TurnMessage
+        :rtype: str
+
+Unit 
+    Ancestors (in MRO)
+    ------------------
+    bc.Unit
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        A single unit in the game and all its associated properties.
+        :type self: Unit
+        :rtype: Unit
+
+    clone(self)
+        Deep-copy a Unit
+        :type self: Unit
+        :rtype: Unit
+
+    damage(self)
+        The damage inflicted by the robot during a normal attack.
+        Errors if the unit is not a robot.
+        :type self: Unit
+        :rtype: int
+
+    from_json(s)
+        Deserialize a Unit from a JSON string
+        :type s: str
+        :rtype: Unit
+
+    structure_garrison(self)
+        Returns the units in the structure's garrison.
+        #Errors if the unit is not a structure.
+        :type self: Unit
+        :rtype: VecUnitID
+
+    to_json(self)
+        Serialize a Unit to a JSON string
+        :type self: Unit
+        :rtype: str
+
+    Instance variables
+    ------------------
+    ability_cooldown
+        The active ability cooldown.
+        Errors if the unit is not a robot.
+        :type self: Unit
+        :rtype: int
+
+    ability_heat
+        The active ability heat.
+        Errors if the unit is not a robot.
+        :type self: Unit
+        :rtype: int
+
+    ability_range
+        The active ability range.
+        Errors if the unit is not a robot.
+        :type self: Unit
+        :rtype: int
+
+    attack_cooldown
+        The attack cooldown.
+        Errors if the unit is not a robot.
+        :type self: Unit
+        :rtype: int
+
+    attack_heat
+        The attack heat.
+        Errors if the unit is not a robot.
+        :type self: Unit
+        :rtype: int
+
+    attack_range
+        The attack range.
+        Errors if the unit is not a robot.
+        :type self: Unit
+        :rtype: int
+
+    healer_self_heal_amount
+        The amount of health passively restored to itself each round.
+        Errors if the unit is not a healer.
+        :type self: Unit
+        :rtype: int
+
+    health
+        The current health.
+        :type self: Unit
+        :rtype: int
+
+    id
+        The unique ID of a unit.
+        :type self: Unit
+        :rtype: int
+
+    is_ability_unlocked
+        Whether the active ability is unlocked.
+        Errors if the unit is not a robot.
+        :type self: Unit
+        :rtype: bool
+
+    knight_defense
+        The amount of damage resisted by a knight when attacked.
+        Errors if the unit is not a knight.
+        :type self: Unit
+        :rtype: int
+
+    location
+        The location of the unit.
+        :type self: Unit
+        :rtype: Location
+
+    max_health
+        The maximum health.
+        :type self: Unit
+        :rtype: int
+
+    movement_cooldown
+        The movement cooldown.
+        Errors if the unit is not a robot.
+        :type self: Unit
+        :rtype: int
+
+    movement_heat
+        The movement heat.
+        Errors if the unit is not a robot.
+        :type self: Unit
+        :rtype: int
+
+    ranger_cannot_attack_range
+        The range within a ranger cannot attack.
+        Errors if the unit is not a ranger.
+        :type self: Unit
+        :rtype: int
+
+    ranger_is_sniping
+        Whether the ranger is sniping.
+        Errors if the unit is not a ranger.
+        :type self: Unit
+        :rtype: bool
+
+    research_level
+        The current research level.
+        :type self: Unit
+        :rtype: int
+
+    rocket_is_used
+        Whether the rocket has already been used.
+        Errors if the unit is not a rocket.
+        :type self: Unit
+        :rtype: bool
+
+    rocket_travel_time_decrease
+        The number of rounds the rocket travel time is reduced by compared
+        to the travel time determined by the orbit of the planets.
+        Errors if the unit is not a rocket.
+        :type self: Unit
+        :rtype: int
+
+    structure_is_built
+        Whether this structure has been built.
+        Errors if the unit is not a structure.
+        :type self: Unit
+        :rtype: bool
+
+    structure_max_capacity
+        The max capacity of a structure.
+        Errors if the unit is not a structure.
+        :type self: Unit
+        :rtype: int
+
+    team
+        The team the unit belongs to.
+        :type self: Unit
+        :rtype: Team
+
+    unit_type
+        The unit type.
+        :type self: Unit
+        :rtype: UnitType
+
+    vision_range
+        The unit vision range.
+        :type self: Unit
+        :rtype: int
+
+    worker_build_health
+        The health restored when building or repairing a structure.
+        Errors if the unit is not a worker.
+        :type self: Unit
+        :rtype: int
+
+    worker_harvest_amount
+        The maximum amount of karbonite harvested from a deposit in one turn.
+        Errors if the unit is not a worker.
+        :type self: Unit
+        :rtype: int
+
+    worker_has_acted
+        Whether the worker has already acted (harveted, blueprinted, built, or
+        repaired) this round.
+        Errors if the unit is not a worker.
+        :type self: Unit
+        :rtype: bool
+
+UnitType 
+    An enumeration.
+
+    Ancestors (in MRO)
+    ------------------
+    bc.UnitType
+    enum.IntEnum
+    builtins.int
+    enum.Enum
+    builtins.object
+
+    Class variables
+    ---------------
+    Factory
+
+    Healer
+
+    Knight
+
+    Mage
+
+    Ranger
+
+    Rocket
+
+    Worker
+
+VecUnitID 
+    Ancestors (in MRO)
+    ------------------
+    bc.VecUnitID
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        An immutable list of bc::unit::UnitID objects
+        :type self: VecUnitID
+        :rtype: VecUnitID
+
+    clone(self)
+        Deep-copy a VecUnitID
+        :type self: VecUnitID
+        :rtype: VecUnitID
+
+VecUnitType 
+    Ancestors (in MRO)
+    ------------------
+    bc.VecUnitType
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        An immutable list of bc::unit::UnitType objects
+        :type self: VecUnitType
+        :rtype: VecUnitType
+
+    clone(self)
+        Deep-copy a VecUnitType
+        :type self: VecUnitType
+        :rtype: VecUnitType
+
+ViewerKeyframe 
+    Ancestors (in MRO)
+    ------------------
+    bc.ViewerKeyframe
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: ViewerKeyframe
+        :rtype: ViewerKeyframe
+
+    from_json(s)
+        Deserialize a ViewerKeyframe from a JSON string
+        :type s: str
+        :rtype: ViewerKeyframe
+
+    to_json(self)
+        Serialize a ViewerKeyframe to a JSON string
+        :type self: ViewerKeyframe
+        :rtype: str
+
+ViewerMessage 
+    Ancestors (in MRO)
+    ------------------
+    bc.ViewerMessage
+    builtins.object
+
+    Static methods
+    --------------
+    __init__(self)
+        :type self: ViewerMessage
+        :rtype: ViewerMessage
+
+    from_json(s)
+        Deserialize a ViewerMessage from a JSON string
+        :type s: str
+        :rtype: ViewerMessage
+
+    to_json(self)
+        Serialize a ViewerMessage to a JSON string
+        :type self: ViewerMessage
+        :rtype: str

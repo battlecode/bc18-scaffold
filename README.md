@@ -68,7 +68,9 @@ If you're running java bots, you'll need the jdk 8 on your PATH, and if you're r
 
 ## Playing with docker
 
-You can also run games in Docker, a cross-platform container system. If you followed the previous instructions you DON'T NEED TO DO THIS. To start, install docker, and make sure it's started.  
+You can also run games in Docker, a cross-platform container system. If you followed the previous instructions you DON'T NEED TO DO THIS.
+
+To start, install docker, and make sure it's started.  
 
 ### Unix instructions
 
