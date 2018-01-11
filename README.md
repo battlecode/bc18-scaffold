@@ -3,15 +3,22 @@
 The game now supports running with docker AND running without docker. See below for the docker instructions.
 
 ## Playing without docker
-To play the game without docker, download the most recent version of this repository (see the green Download button above?).
+To play the game without docker:
+
+READ THE WHOLE SECTION FOR YOUR OS. If you don't follow instructions we can't help you.
+
+Download the most recent version of this repository (see the green Download button above?).
 
 Unfortunately, since we don't have docker we'll have to install some other things.
 
 Note that if you are copying over an old game (that used to run in docker), you HAVE to copy the new run.sh and run.bat files for your language from the correct examplefuncsplayer folder. Your code will continue to work *inside* docker, but will not work outside of it without the new run.sh and run.bat files.
 
 ### Windows
-First, install Python 3. Specifically, Python 3.6 64 bit. There's a download link here: https://www.python.org/ftp/python/3.6.4/python-3.6.4-amd64.exe
-Make sure you click "Add Python 3.6 to my Path".
+First, install Python 3.6 64 bit. If you have a python 3 install but it isn't 64 bit this won't work.
+
+There's a download link here: https://www.python.org/ftp/python/3.6.4/python-3.6.4-amd64.exe
+
+MAKE SURE you click "Add Python 3.6 to my Path".
 
 Now, start a command prompt (search `cmd` in the start menu) and run:
 ```sh
@@ -21,7 +28,8 @@ If you get output that looks something like:
 ```
 3.6.4 (v3.6.4:d48eceb, Dec 19 2017, 06:54:40) [MSC v.1900 64 bit (AMD64)]
 ```
-Then you should be good to go.
+
+See the `64 bit` part? That's important.
 
 Next, copy over the new run.sh and run.bat files from the examplefuncsplayer folders into your player folders. (If your bot is python, copy over the python run.sh and run.bat scripts, and so on.)
 
