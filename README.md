@@ -43,6 +43,12 @@ NOTE: Currently, ONLY PYTHON works outside docker on windows. This will be fixed
 Install Python 3 and [homebrew](https://brew.sh/):
 http://docs.python-guide.org/en/latest/starting/install3/osx/
 
+~~~~
+# In a terminal this can be done using
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew install python3
+~~~~
+
 Once you have python 3 installed, open a terminal (the app is at /Applications/Utilities/Terminal.app).
 
 In the terminal, run the following command:
@@ -60,7 +66,7 @@ Next, run `brew install libffi`.
 
 Next, copy over the new run.sh and run.bat files from the examplefuncsplayer folders into your player folders. (If your bot is python, copy over the python run.sh and run.bat scripts, and so on.)
 
-Finally, cd to the directory you downloaded this repository to.
+Finally, `cd` to the directory you downloaded this repository to.
 
 Run: `./run_nodocker.sh`
 
@@ -71,8 +77,28 @@ If you're running java bots, you'll need the jdk 8 on your PATH, and if you're r
 ### Linux
 You need python 3.6, libffi-dev, and linux-headers. Install them via your package manager. Then run `run_nodocker.sh`.
 
+~~~~
+# Most (all?) of these can be installed using
+sudo apt install make software-properties-common build-essential
+
+# On Ubuntu 16.04 and similar ubuntu versions before Ubuntu 17 it can be a bit tricky to install python3.6.
+# You will need to do this:
+sudo add-apt-repository ppa:jonathonf/python-3.6
+sudo apt update
+sudo apt install python3.6
+~~~~
+
 If you're running java bots, you'll need the jdk 8 on your PATH, and if you're running c bots, you'll need gcc.
 
+If you do not have java installed, you can install it using
+~~~~
+sudo apt install default-jdk
+~~~~
+
+Finally you can run
+~~~~
+./run_nodocker.sh
+~~~~
 
 ## Playing with docker
 
