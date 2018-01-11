@@ -1,6 +1,74 @@
 # Scaffold for Battlecode 2018
 
-This is how you run games!  To start, install docker, and make sure it's started.  
+The game now supports running with docker AND running without docker. See below for the docker instructions.
+
+## Playing without docker
+To play the game without docker, download the most recent version of this repository (see the green Download button above?).
+
+Unfortunately, since we don't have docker we'll have to install some other things.
+
+Note that if you are copying over an old game (that used to run in docker), you HAVE to copy the new run.sh and run.bat files for your language from the correct examplefuncsplayer folder. Your code will continue to work *inside* docker, but will not work outside of it without the new run.sh and run.bat files.
+
+### Windows
+First, install Python 3. Specifically, Python 3.6 64 bit. There's a download link here: https://www.python.org/ftp/python/3.6.4/python-3.6.4-amd64.exe
+Make sure you click "Add Python 3.6 to my Path".
+
+Now, start a command prompt (search `cmd` in the start menu) and run:
+```sh
+python3 -c "import sys; print(sys.version)"
+```
+If you get output that looks something like:
+```
+3.6.4 (v3.6.4:d48eceb, Dec 19 2017, 06:54:40) [MSC v.1900 64 bit (AMD64)]
+```
+Then you should be good to go.
+
+Next, copy over the new run.sh and run.bat files from the examplefuncsplayer folders into your player folders. (If your bot is python, copy over the python run.sh and run.bat scripts, and so on.)
+
+Now, go to wherever you downloaded this repo and run the run_nodocker.bat script.
+It should install a few other things and then quickly start up!
+Go to the link in the terminal and run a game or two.
+NOTE: Currently, ONLY PYTHON works outside docker on windows. This will be fixed as soon as we figure out how to get the other languages linking correctly. Just stick with Python for now :)
+
+### Mac
+
+Install Python 3 and [homebrew](https://brew.sh/):
+http://docs.python-guide.org/en/latest/starting/install3/osx/
+
+Once you have python 3 installed, open a terminal (the app is at /Applications/Utilities/Terminal.app).
+
+In the terminal, run the following command:
+```sh
+python3 -c "import sys; print(sys.version)"
+```
+If you get output that looks something like:
+```
+3.6.4 (default, Dec 19 2017, 15:24:51)
+[GCC 4.2.1 Compatible Apple LLVM 9.0.0 (clang-900.0.39.2)]
+```
+Then you've got working python.
+
+Next, run `brew install libffi`.
+
+Next, copy over the new run.sh and run.bat files from the examplefuncsplayer folders into your player folders. (If your bot is python, copy over the python run.sh and run.bat scripts, and so on.)
+
+Finally, cd to the directory you downloaded this repository to.
+
+Run: `./run_nodocker.sh`
+
+This will download the rest of the python dependencies (just a couple of python libraries) and run the manager. You can now run bots in the same way you did before!
+
+If you're running java bots, you'll need the jdk 8 on your PATH, and if you're running c bots, you'll need gcc.
+
+### Linux
+You need python 3.6, libffi-dev, and linux-headers. Install them via your package manager. Then run `run_nodocker.sh`.
+
+If you're running java bots, you'll need the jdk 8 on your PATH, and if you're running c bots, you'll need gcc.
+
+
+## Playing with docker
+
+You can also run games in Docker, a cross-platform container system. If you followed the previous instructions you DON'T NEED TO DO THIS. To start, install docker, and make sure it's started.  
 
 ### Unix instructions
 
@@ -8,7 +76,6 @@ This is how you run games!  To start, install docker, and make sure it's started
 Install docker for mac: https://www.docker.com/docker-mac
 
 Clone the repo, or click https://github.com/battlecode/bc18-scaffold/archive/master.zip to download
-
 
 #### Linux:
 Install docker for your system.
