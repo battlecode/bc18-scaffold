@@ -39,6 +39,8 @@ Go to the link in the terminal and run a game or two.
 NOTE: Currently, ONLY PYTHON works outside docker on windows. This will be fixed as soon as we figure out how to get the other languages linking correctly. Just stick with Python for now :)
 
 ## ERRORS
+
+#### Library errors
 if you get:
 
 `ModuleNotFoundError: No module named cffi_backend`
@@ -54,6 +56,8 @@ py -3 -m pip uninstall cffi eel greenlet tqdm werkzeug psutil pycparser gevent g
 
 Before re-running `run_nodocker.bat`.
 
+#### Access denied
+If you get `Access is denied: ...\\battlecode_manager\\working_dir\\battlecode\\...` while running a new game, it means that some of your old players are running. Go to task manager and kill any runaway python processes.
 
 ### Mac
 
