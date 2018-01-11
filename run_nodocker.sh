@@ -8,9 +8,9 @@ mtput() {
 echo "=== STARTING THE MANAGER (no docker) ==="
 echo "=== ensuring dependencies ==="
 mtput setaf 5
-echo "$ pip3 install --user cffi eel tqdm werkzeug ujson psutil"
+echo "$ pip3 install --user cffi eel tqdm werkzeug psutil"
 mtput sgr0
-pip3 install --user cffi eel tqdm werkzeug ujson psutil
+pip3 install --user cffi eel tqdm werkzeug psutil
 RESULT=$?
 if [ $RESULT -ne 0 ]; then
     echo "Warning: pip install failed!"
