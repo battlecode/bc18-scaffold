@@ -1145,6 +1145,10 @@ uint8_t bc_GameController_is_over(bc_GameController* this);
 bc_Team bc_GameController_winning_team(bc_GameController* this);
 /// 
 char* bc_GameController_manager_viewer_message(bc_GameController* this);
+/// 
+void bc_GameController_print_game_ansi(bc_GameController* this);
+/// 
+uint32_t bc_GameController_manager_karbonite(bc_GameController* this, bc_Team team);
 #ifdef __cplusplus
 }
 #endif

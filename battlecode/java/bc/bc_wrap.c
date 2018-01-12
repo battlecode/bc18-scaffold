@@ -9233,6 +9233,52 @@ SWIGEXPORT jstring JNICALL Java_bc_bcJNI_GameController_1managerViewerMessage(JN
 }
 
 
+SWIGEXPORT void JNICALL Java_bc_bcJNI_GameController_1printGameAnsi(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  struct bc_GameController *arg1 = (struct bc_GameController *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(struct bc_GameController **)&jarg1; 
+  {
+    bc_GameController_print_game_ansi(arg1);
+    if (unlikely(bc_has_err())) {
+      char *result;
+      int8_t error = bc_get_last_err(&result);
+      {
+        SWIG_JavaException(jenv, error, result); return ; 
+      };
+    }
+  }
+}
+
+
+SWIGEXPORT jlong JNICALL Java_bc_bcJNI_GameController_1managerKarbonite(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jlong jresult = 0 ;
+  struct bc_GameController *arg1 = (struct bc_GameController *) 0 ;
+  bc_Team arg2 ;
+  uint32_t result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(struct bc_GameController **)&jarg1; 
+  arg2 = (bc_Team)jarg2; 
+  {
+    result = (uint32_t)bc_GameController_manager_karbonite(arg1,arg2);
+    if (unlikely(bc_has_err())) {
+      char *result;
+      int8_t error = bc_get_last_err(&result);
+      {
+        SWIG_JavaException(jenv, error, result); return 0; 
+      };
+    }
+  }
+  jresult = (jlong)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jlong JNICALL Java_bc_bcJNI_bcGameControllerNewManager(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   bc_GameMap *arg1 = (bc_GameMap *) 0 ;

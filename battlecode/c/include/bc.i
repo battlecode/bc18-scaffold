@@ -980,6 +980,10 @@ typedef struct bc_GameController {} bc_GameController;
     bc_Team winning_team();
     %newobject bc_GameController_manager_viewer_message;
     char* manager_viewer_message();
+    %newobject bc_GameController_print_game_ansi;
+    void print_game_ansi();
+    %newobject bc_GameController_manager_karbonite;
+    uint32_t manager_karbonite(bc_Team team);
 }
 %newobject bc_GameController_new_manager;
 bc_GameController* bc_GameController_new_manager(bc_GameMap* map);

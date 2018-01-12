@@ -5616,4 +5616,28 @@ class GameController(object):
         result = _result.decode()
         return result
 
+    def print_game_ansi(self):
+        # type: () -> None
+        '''
+        :type self: GameController
+        :rtype: None
+        '''
+
+        result = _lib.bc_GameController_print_game_ansi(self._ptr)
+        _check_errors()
+        return result
+
+    def manager_karbonite(self, team):
+        # type: (Team) -> int
+        '''
+        :type self: GameController
+        :type team: Team
+        :rtype: int
+        '''
+        assert type(team) is Team, "incorrect type of arg team: should be Team, is {}".format(type(team))
+
+        result = _lib.bc_GameController_manager_karbonite(self._ptr, team)
+        _check_errors()
+        return result
+
 

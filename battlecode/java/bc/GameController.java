@@ -357,4 +357,12 @@ public class GameController {
     return bcJNI.GameController_managerViewerMessage(swigCPtr, this);
   }
 
+  public void printGameAnsi() {
+    bcJNI.GameController_printGameAnsi(swigCPtr, this);
+  }
+
+  public long managerKarbonite(Team team) {
+    return bcJNI.GameController_managerKarbonite(swigCPtr, this, team.swigValue());
+  }
+
 }
