@@ -1,13 +1,11 @@
-import bc.*;
-
 class Extra {
-    int x;
+    int sd;
 
     Extra(int x) {
-        this.x = x;
+        this.sd = x;
     }
 
     public String toString() {
-        return "Extra: "+this.x;
+        return "Extra: "+this.sd;
     }
 }
