@@ -3711,6 +3711,23 @@ class GameMap(object):
         result = _result
         return result
 
+    @staticmethod
+    def parse_text_map(map):
+        # type: (str) -> GameMap
+        '''parse a .bc18t map file
+        :type map: str
+        :rtype: GameMap
+        '''
+        assert type(map) is str, "incorrect type of arg map: should be str, is {}".format(type(map))
+
+        result = _lib.bc_GameMap_parse_text_map(_ffi.new("char[]", map.encode()))
+        _check_errors()
+        _result = GameMap.__new__(GameMap)
+        if result != _ffi.NULL:
+            _result._ptr = result
+        result = _result
+        return result
+
     def clone(self):
         # type: () -> GameMap
         '''Deep-copy a GameMap

@@ -733,6 +733,8 @@ void bc_GameMap_orbit_set(bc_GameMap* this, bc_OrbitPattern* orbit);
 void bc_GameMap_validate(bc_GameMap* this);
 /// 
 bc_GameMap* bc_GameMap_test_map();
+/// parse a .bc18t map file
+bc_GameMap* bc_GameMap_parse_text_map(char* map);
 /// Deep-copy a GameMap
 bc_GameMap* bc_GameMap_clone(bc_GameMap* this);
 /// Deserialize a GameMap from a JSON string

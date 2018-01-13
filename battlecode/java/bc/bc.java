@@ -188,6 +188,11 @@ public class bc {
     return (cPtr == 0) ? null : new GameMap(cPtr, true);
   }
 
+  public static GameMap bcGameMapParseTextMap(String map) {
+    long cPtr = bcJNI.bcGameMapParseTextMap(map);
+    return (cPtr == 0) ? null : new GameMap(cPtr, true);
+  }
+
   public static GameMap bcGameMapFromJson(String s) {
     long cPtr = bcJNI.bcGameMapFromJson(s);
     return (cPtr == 0) ? null : new GameMap(cPtr, true);

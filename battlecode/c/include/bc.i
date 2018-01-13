@@ -738,6 +738,9 @@ typedef struct bc_GameMap {} bc_GameMap;
 %newobject bc_GameMap_test_map;
 bc_GameMap* bc_GameMap_test_map();
 
+%newobject bc_GameMap_parse_text_map;
+bc_GameMap* bc_GameMap_parse_text_map(char* map);
+
 %newobject bc_GameMap_from_json;
 bc_GameMap* bc_GameMap_from_json(char* s);
 

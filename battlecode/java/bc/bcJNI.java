@@ -307,6 +307,7 @@ public class bcJNI {
   public final static native void GameMap_orbit_set(long jarg1, GameMap jarg1_, long jarg2, OrbitPattern jarg2_);
   public final static native long GameMap_orbit_get(long jarg1, GameMap jarg1_);
   public final static native long bcGameMapTestMap();
+  public final static native long bcGameMapParseTextMap(String jarg1);
   public final static native long bcGameMapFromJson(String jarg1);
   public final static native long maxLevel(int jarg1);
   public final static native long costOf(int jarg1, long jarg2);
