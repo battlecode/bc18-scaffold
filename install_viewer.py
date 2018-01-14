@@ -19,12 +19,12 @@ def isNewer(new, original):
 def main():
     currentInstallFileName = "viewer_currentInstall.json"
 
-    versionAndChangeLogUrl = "https://s3.amazonaws.com/battlecode-2018/viewer/"
+    versionAndChangeLogUrl = "http://s3.amazonaws.com/battlecode-2018/viewer/"
 
     versionFileName = "version.txt"
     changelogFileName = "changelog.json"
 
-    baseUrl = "https://s3.amazonaws.com/battlecode-2018/viewer/"
+    baseUrl = "http://s3.amazonaws.com/battlecode-2018/viewer/"
 
     directory = os.path.dirname(os.path.realpath(__file__))
 
