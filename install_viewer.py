@@ -16,6 +16,11 @@ def isNewer(new, original):
     return majorMult * major2 + minorMult * minor2 + patchMult * minor2 > majorMult * major1 + minorMult * minor1 + patchMult * minor1
 
 
+def downloadProgress(count, blockSize, totalSize):
+    if count % 1000 == 0:
+        percentDone = float(count) * blockSize / totalSize
+        print("%4.2f%%" % percentDone,end='\b\b\b\b\b\b',flush=True)
+
 def main():
     currentInstallFileName = "viewer_currentInstall.json"
 
@@ -78,7 +83,8 @@ def main():
                 os.remove(downloadLocation)
                 print("Deleted old archive.")
             print("Downloading new client... This could take a while.")
-            urlretrieve(newestUrl, downloadLocation)
+            urlretrieve(newestUrl, downloadLocation, downloadProgress)
+            print()
             print("Successfully downloaded files. ")
             outputDirectory = os.path.join(directory, viewerDirectory)
             if os.path.exists(outputDirectory):
