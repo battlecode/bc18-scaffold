@@ -2596,6 +2596,18 @@ class StartTurnMessage(object):
             _lib.delete_bc_StartTurnMessage(self._ptr)
             _check_errors()
     @property
+    def time_left_ms(self):
+        # type: () -> int
+        '''
+        :type self: StartTurnMessage
+        :rtype: int
+        '''
+
+        result = _lib.bc_StartTurnMessage_time_left_ms_get(self._ptr)
+        _check_errors()
+        return result
+
+    @property
     def round(self):
         # type: () -> int
         '''
@@ -2604,6 +2616,20 @@ class StartTurnMessage(object):
         '''
 
         result = _lib.bc_StartTurnMessage_round_get(self._ptr)
+        _check_errors()
+        return result
+
+    @time_left_ms.setter
+    def time_left_ms(self, time_left_ms):
+        # type: (int) -> None
+        '''
+        :type self: StartTurnMessage
+        :type time_left_ms: int
+        :rtype: None
+        '''
+        assert type(time_left_ms) is int, "incorrect type of arg time_left_ms: should be int, is {}".format(type(time_left_ms))
+
+        result = _lib.bc_StartTurnMessage_time_left_ms_set(self._ptr, time_left_ms)
         _check_errors()
         return result
 
@@ -2864,6 +2890,209 @@ class ErrorMessage(object):
         '''
 
         result = _lib.bc_ErrorMessage_debug(self._ptr)
+        _check_errors()
+        _result = _ffi.string(result)
+        _lib.bc_free_string(result)
+        result = _result.decode()
+        return result
+
+
+
+class ReceivedMessaTurnMessage(object):
+    __slots__ = ['_ptr']
+    def __init__(self):
+        # type: () -> ReceivedMessaTurnMessage
+        '''
+        :type self: ReceivedMessaTurnMessage
+        :rtype: ReceivedMessaTurnMessage
+        '''
+
+        ptr = _lib.new_bc_ReceivedMessaTurnMessage()
+        if ptr != _ffi.NULL: self._ptr = ptr
+        _check_errors()
+
+    def __del__(self):
+        # type: () -> None
+        '''Clean up the object.
+        :type self: ReceivedMessaTurnMessage
+        :rtype: None
+        '''
+
+        if hasattr(self, '_ptr'):
+            # if there was an error in the constructor, we'll have no _ptr
+            _lib.delete_bc_ReceivedMessaTurnMessage(self._ptr)
+            _check_errors()
+
+
+    @staticmethod
+    def from_json(s):
+        # type: (str) -> ReceivedMessaTurnMessage
+        '''Deserialize a ReceivedMessaTurnMessage from a JSON string
+        :type s: str
+        :rtype: ReceivedMessaTurnMessage
+        '''
+        assert type(s) is str, "incorrect type of arg s: should be str, is {}".format(type(s))
+
+        result = _lib.bc_ReceivedMessaTurnMessage_from_json(_ffi.new("char[]", s.encode()))
+        _check_errors()
+        _result = ReceivedMessaTurnMessage.__new__(ReceivedMessaTurnMessage)
+        if result != _ffi.NULL:
+            _result._ptr = result
+        result = _result
+        return result
+
+    def to_json(self):
+        # type: () -> str
+        '''Serialize a ReceivedMessaTurnMessage to a JSON string
+        :type self: ReceivedMessaTurnMessage
+        :rtype: str
+        '''
+
+        result = _lib.bc_ReceivedMessaTurnMessage_to_json(self._ptr)
+        _check_errors()
+        _result = _ffi.string(result)
+        _lib.bc_free_string(result)
+        result = _result.decode()
+        return result
+
+    def __repr__(self):
+        # type: () -> str
+        '''Create a human-readable representation of a ReceivedMessaTurnMessage
+        :type self: ReceivedMessaTurnMessage
+        :rtype: str
+        '''
+
+        result = _lib.bc_ReceivedMessaTurnMessage_debug(self._ptr)
+        _check_errors()
+        _result = _ffi.string(result)
+        _lib.bc_free_string(result)
+        result = _result.decode()
+        return result
+
+
+
+class SentMessage(object):
+    __slots__ = ['_ptr']
+    def __init__(self):
+        # type: () -> SentMessage
+        '''
+        :type self: SentMessage
+        :rtype: SentMessage
+        '''
+
+        ptr = _lib.new_bc_SentMessage()
+        if ptr != _ffi.NULL: self._ptr = ptr
+        _check_errors()
+
+    def __del__(self):
+        # type: () -> None
+        '''Clean up the object.
+        :type self: SentMessage
+        :rtype: None
+        '''
+
+        if hasattr(self, '_ptr'):
+            # if there was an error in the constructor, we'll have no _ptr
+            _lib.delete_bc_SentMessage(self._ptr)
+            _check_errors()
+    @property
+    def client_id(self):
+        # type: () -> str
+        '''
+        :type self: SentMessage
+        :rtype: str
+        '''
+
+        result = _lib.bc_SentMessage_client_id_get(self._ptr)
+        _check_errors()
+        _result = _ffi.string(result)
+        _lib.bc_free_string(result)
+        result = _result.decode()
+        return result
+
+    @property
+    def turn_message(self):
+        # type: () -> TurnMessage
+        '''
+        :type self: SentMessage
+        :rtype: TurnMessage
+        '''
+
+        result = _lib.bc_SentMessage_turn_message_get(self._ptr)
+        _check_errors()
+        _result = TurnMessage.__new__(TurnMessage)
+        if result != _ffi.NULL:
+            _result._ptr = result
+        result = _result
+        return result
+
+    @client_id.setter
+    def client_id(self, client_id):
+        # type: (str) -> None
+        '''
+        :type self: SentMessage
+        :type client_id: str
+        :rtype: None
+        '''
+        assert type(client_id) is str, "incorrect type of arg client_id: should be str, is {}".format(type(client_id))
+
+        result = _lib.bc_SentMessage_client_id_set(self._ptr, _ffi.new("char[]", client_id.encode()))
+        _check_errors()
+        return result
+
+    @turn_message.setter
+    def turn_message(self, turn_message):
+        # type: (TurnMessage) -> None
+        '''
+        :type self: SentMessage
+        :type turn_message: TurnMessage
+        :rtype: None
+        '''
+        assert type(turn_message) is TurnMessage, "incorrect type of arg turn_message: should be TurnMessage, is {}".format(type(turn_message))
+
+        result = _lib.bc_SentMessage_turn_message_set(self._ptr, turn_message._ptr)
+        _check_errors()
+        return result
+
+    @staticmethod
+    def from_json(s):
+        # type: (str) -> SentMessage
+        '''Deserialize a SentMessage from a JSON string
+        :type s: str
+        :rtype: SentMessage
+        '''
+        assert type(s) is str, "incorrect type of arg s: should be str, is {}".format(type(s))
+
+        result = _lib.bc_SentMessage_from_json(_ffi.new("char[]", s.encode()))
+        _check_errors()
+        _result = SentMessage.__new__(SentMessage)
+        if result != _ffi.NULL:
+            _result._ptr = result
+        result = _result
+        return result
+
+    def to_json(self):
+        # type: () -> str
+        '''Serialize a SentMessage to a JSON string
+        :type self: SentMessage
+        :rtype: str
+        '''
+
+        result = _lib.bc_SentMessage_to_json(self._ptr)
+        _check_errors()
+        _result = _ffi.string(result)
+        _lib.bc_free_string(result)
+        result = _result.decode()
+        return result
+
+    def __repr__(self):
+        # type: () -> str
+        '''Create a human-readable representation of a SentMessage
+        :type self: SentMessage
+        :rtype: str
+        '''
+
+        result = _lib.bc_SentMessage_debug(self._ptr)
         _check_errors()
         _result = _ffi.string(result)
         _lib.bc_free_string(result)
@@ -4334,6 +4563,17 @@ class GameController(object):
         _check_errors()
         return result
 
+    def get_time_left_ms(self):
+        # type: () -> int
+        '''Get the time left at the start of this player's turn, in milliseconds.
+        :type self: GameController
+        :rtype: int
+        '''
+
+        result = _lib.bc_GameController_get_time_left_ms(self._ptr)
+        _check_errors()
+        return result
+
     def round(self):
         # type: () -> int
         '''The current round, starting at round 1 and up to ROUND_LIMIT rounds. A round consists of a turn from each team on each planet.
@@ -5563,16 +5803,18 @@ class GameController(object):
         result = _result
         return result
 
-    def apply_turn(self, turn):
-        # type: (TurnMessage) -> TurnApplication
+    def apply_turn(self, turn, time_left_ms):
+        # type: (TurnMessage, int) -> TurnApplication
         '''
         :type self: GameController
         :type turn: TurnMessage
+        :type time_left_ms: int
         :rtype: TurnApplication
         '''
         assert type(turn) is TurnMessage, "incorrect type of arg turn: should be TurnMessage, is {}".format(type(turn))
+        assert type(time_left_ms) is int, "incorrect type of arg time_left_ms: should be int, is {}".format(type(time_left_ms))
 
-        result = _lib.bc_GameController_apply_turn(self._ptr, turn._ptr)
+        result = _lib.bc_GameController_apply_turn(self._ptr, turn._ptr, time_left_ms)
         _check_errors()
         _result = TurnApplication.__new__(TurnApplication)
         if result != _ffi.NULL:
@@ -5580,14 +5822,16 @@ class GameController(object):
         result = _result
         return result
 
-    def initial_start_turn_message(self):
-        # type: () -> InitialTurnApplication
+    def initial_start_turn_message(self, time_left_ms):
+        # type: (int) -> InitialTurnApplication
         '''
         :type self: GameController
+        :type time_left_ms: int
         :rtype: InitialTurnApplication
         '''
+        assert type(time_left_ms) is int, "incorrect type of arg time_left_ms: should be int, is {}".format(type(time_left_ms))
 
-        result = _lib.bc_GameController_initial_start_turn_message(self._ptr)
+        result = _lib.bc_GameController_initial_start_turn_message(self._ptr, time_left_ms)
         _check_errors()
         _result = InitialTurnApplication.__new__(InitialTurnApplication)
         if result != _ffi.NULL:
