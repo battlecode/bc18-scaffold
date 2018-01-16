@@ -51,22 +51,22 @@ def end_game(data,winner,match_file,logs):
 
     status = -1
     if winner == 'player1':
-        status = 2
+        status = 'redwon'
     elif winner == 'player2':
-        status = 3
+        status = 'bluewon'
 
     replay_key = 'replays/' + str(data['id']) + '.bc18';
-    replay = s3.Object(os.environ['BUCKET_NAME'], replay_key)
-    replay.put(Body=json.dumps(match_file).encode())
+    replay = s3.ObjectAcl(os.environ['BUCKET_NAME'], replay_key)
+    replay.put(Body=json.dumps(match_file).encode(),ACL='public-read')
 
     red_log_key = 'logs/' + str(data['id']) + '_0.bc18log'
     blue_log_key = 'logs/' + str(data['id']) + '_1.bc18log'
 
-    red_log = s3.Object(os.environ['BUCKET_NAME'], red_log_key)
-    red_log.put(Body=json.dumps({'earth':logs[0],'mars':logs[2]}).encode())
+    red_log = s3.ObjectAcl(os.environ['BUCKET_NAME'], red_log_key)
+    red_log.put(Body=json.dumps({'earth':logs[0],'mars':logs[2]}).encode(),ACL='public-read')
 
-    blue_log = s3.Object(os.environ['BUCKET_NAME'], blue_log_key)
-    blue_log.put(Body=json.dumps({'earth':logs[1],'mars':logs[3]}).encode())
+    blue_log = s3.ObjectAcl(os.environ['BUCKET_NAME'], blue_log_key)
+    blue_log.put(Body=json.dumps({'earth':logs[1],'mars':logs[3]}).encode(),ACL='public-read')
 
     while DB_LOCK == True:
         sleep(0.1)
@@ -128,7 +128,7 @@ def poll_thread():
             sleep(0.1)
         DB_LOCK = True
 
-        cur.execute("SELECT (id, red_key, blue_key, map) FROM " + os.environ["TABLE_NAME"] + " WHERE status=0 or (status=1 and start < (NOW() - INTERVAL '5 min')) ORDER BY start ASC")
+        cur.execute("SELECT (id, red_key, blue_key, map) FROM " + os.environ["TABLE_NAME"] + " WHERE status='queued' or (status='running' and start < (NOW() - INTERVAL '5 min')) ORDER BY start ASC")
 
         row = cur.fetchone()
 
@@ -141,7 +141,7 @@ def poll_thread():
 
             if not BUSY:
                 BUSY = True
-                cur.execute("UPDATE " + os.environ['TABLE_NAME'] + " SET status=1, start=NOW() WHERE id=%s",(data['id'],))
+                cur.execute("UPDATE " + os.environ['TABLE_NAME'] + " SET status='running', start=NOW() WHERE id=%s",(data['id'],))
                 pg.commit()
 
                 run_match(data)
@@ -167,7 +167,7 @@ def application(request):
         while DB_LOCK == True:
             sleep(0.1)
         DB_LOCK = True
-        cur.execute("INSERT INTO " + os.environ["TABLE_NAME"] + " (red_key, blue_key, map, status, start) VALUES (%s, %s, %s," + str(0 if BUSY else 1) + ", now()) RETURNING id", (data['red_key'],data['blue_key'],data['map']))
+        cur.execute("INSERT INTO " + os.environ["TABLE_NAME"] + " (red_key, blue_key, map, status, start) VALUES (%s, %s, %s," + ('queued' if BUSY else 'running') + ", now()) RETURNING id", (data['red_key'],data['blue_key'],data['map']))
 
         pg.commit()
         game_id = cur.fetchone()[0]
