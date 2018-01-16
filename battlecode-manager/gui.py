@@ -11,6 +11,7 @@ import battlecode as bc
 import zipfile
 import requests
 import base64
+import shutil
 
 
 target_dir = os.path.abspath(os.path.dirname(__file__))
@@ -53,13 +54,10 @@ def upload_scrim_server(return_args):
     os.chdir(return_args['file_name'])
     zip_file_name = os.path.abspath(os.path.join('../',
         return_args['file_name']))
+
+    shutil.make_archive(zip_file_name, 'zip', '.')
     if not zip_file_name.endswith('.zip'):
         zip_file_name += '.zip'
-    files = [f for f in os.listdir('.')]
-
-    with zipfile.ZipFile(zip_file_name, 'w', zipfile.ZIP_DEFLATED) as myzip:
-        for f in files:
-            myzip.write(f)
 
     os.chdir(cwd)
     username = return_args['username']
@@ -123,6 +121,7 @@ def save_logs(file_name):
 def start_game(return_args):
     global WINNER
     WINNER = 0
+    return_args['map_name'] = return_args['map']
 
     # check mountpoint for maps first
     c2 = os.path.abspath(os.path.join('/player/battlecode-maps', return_args['map']))

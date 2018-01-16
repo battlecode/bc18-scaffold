@@ -5,6 +5,7 @@ from player_abstract import AbstractPlayer
 
 import random
 import socket
+import server
 
 def _stream_logs(container, stdout, stderr, line_action):
     for line in container.logs(stdout=stdout, stderr=stderr, stream=True):
@@ -25,7 +26,7 @@ class SandboxedPlayer(AbstractPlayer):
         self.socket_name = '/tmp/battlecode-suspender-{}'.format(random.randint(0, 10**50))
         self.suspender_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.suspender_socket.bind(self.socket_name)
-        self.suspender_socket.settimeout(10.) # seconds
+        self.suspender_socket.settimeout(server.BUILD_TIMEOUT) # seconds
         self.suspender_socket.listen(1)
 
         volumes = {
@@ -69,6 +70,20 @@ class SandboxedPlayer(AbstractPlayer):
         assert int(login.strip()) == self.player_key, 'mismatched suspension login: {} != {}'.format(repr(login.strip()), repr(self.player_key))
 
         #cap_drop=['chown, dac_override, fowner, fsetid, kill, setgid, setuid, setpcap, net_bind_service, net_raw, sys_chroot, mknod, audit_write, setfcap'],cpu_period=100000,cpu_quota=self.player_cpu_fraction*100000,
+
+    def guess_language(self):
+        procs = self.container.top()['Processes']
+        for p in procs:
+            name = p[3]
+            if "java" in name:
+                return "jvm"
+            elif "python" in name:
+                return "python"
+            elif "pypy" in name:
+                return "pypy"
+            elif "mono" in name:
+                return "mono"
+        return "c"
 
     def pause(self):
         # see suspender.py
