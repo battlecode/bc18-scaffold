@@ -18,7 +18,7 @@ def isNewer(new, original):
 
 def downloadProgress(count, blockSize, totalSize):
     if count % 1000 == 0:
-        percentDone = float(count) * blockSize / totalSize
+        percentDone = float(count) * blockSize / totalSize * 100.0
         print("%4.2f%%" % percentDone,end='\b\b\b\b\b\b',flush=True)
 
 def main():
