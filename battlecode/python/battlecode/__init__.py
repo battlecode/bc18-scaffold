@@ -2288,16 +2288,17 @@ class PlanetMap(object):
         return result
 
     def validate(self):
-        # type: () -> None
+        # type: () -> bool
         '''Validates the map and checks some invariants are followed.
 
          * InvalidMapObject - the planet map is invalid.
         :type self: PlanetMap
-        :rtype: None
+        :rtype: bool
         '''
 
         result = _lib.bc_PlanetMap_validate(self._ptr)
         _check_errors()
+        result = bool(result)
         return result
 
     def on_map(self, location):
@@ -3142,6 +3143,18 @@ class TurnApplication(object):
         return result
 
     @property
+    def start_turn_error(self):
+        # type: () -> int
+        '''
+        :type self: TurnApplication
+        :rtype: int
+        '''
+
+        result = _lib.bc_TurnApplication_start_turn_error_get(self._ptr)
+        _check_errors()
+        return result
+
+    @property
     def viewer(self):
         # type: () -> ViewerMessage
         '''
@@ -3168,6 +3181,20 @@ class TurnApplication(object):
         assert type(start_turn) is StartTurnMessage, "incorrect type of arg start_turn: should be StartTurnMessage, is {}".format(type(start_turn))
 
         result = _lib.bc_TurnApplication_start_turn_set(self._ptr, start_turn._ptr)
+        _check_errors()
+        return result
+
+    @start_turn_error.setter
+    def start_turn_error(self, start_turn_error):
+        # type: (int) -> None
+        '''
+        :type self: TurnApplication
+        :type start_turn_error: int
+        :rtype: None
+        '''
+        assert type(start_turn_error) is int, "incorrect type of arg start_turn_error: should be int, is {}".format(type(start_turn_error))
+
+        result = _lib.bc_TurnApplication_start_turn_error_set(self._ptr, start_turn_error)
         _check_errors()
         return result
 
@@ -3466,16 +3493,17 @@ class AsteroidPattern(object):
 
 
     def validate(self):
-        # type: () -> None
+        # type: () -> bool
         '''Validates the asteroid pattern.
 
          * InvalidMapObject - the asteroid pattern is invalid.
         :type self: AsteroidPattern
-        :rtype: None
+        :rtype: bool
         '''
 
         result = _lib.bc_AsteroidPattern_validate(self._ptr)
         _check_errors()
+        result = bool(result)
         return result
 
     def has_asteroid(self, round):
@@ -3684,16 +3712,17 @@ class OrbitPattern(object):
         return result
 
     def validate(self):
-        # type: () -> None
+        # type: () -> bool
         '''Validates the orbit pattern.
 
          * InvalidMapObject - the orbit pattern is invalid.
         :type self: OrbitPattern
-        :rtype: None
+        :rtype: bool
         '''
 
         result = _lib.bc_OrbitPattern_validate(self._ptr)
         _check_errors()
+        result = bool(result)
         return result
 
     def duration(self, round):

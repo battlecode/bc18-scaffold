@@ -3861,23 +3861,27 @@ SWIGEXPORT void JNICALL Java_bc_bcJNI_delete_1PlanetMap(JNIEnv *jenv, jclass jcl
 }
 
 
-SWIGEXPORT void JNICALL Java_bc_bcJNI_PlanetMap_1validate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_bc_bcJNI_PlanetMap_1validate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jboolean jresult = 0 ;
   struct bc_PlanetMap *arg1 = (struct bc_PlanetMap *) 0 ;
+  magicbool result;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
   arg1 = *(struct bc_PlanetMap **)&jarg1; 
   {
-    bc_PlanetMap_validate(arg1);
+    result = (magicbool)bc_PlanetMap_validate(arg1);
     if (unlikely(bc_has_err())) {
       char *result;
       int8_t error = bc_get_last_err(&result);
       {
-        SWIG_JavaException(jenv, error, result); return ; 
+        SWIG_JavaException(jenv, error, result); return 0; 
       };
     }
   }
+  jresult = (jshort)result; 
+  return jresult;
 }
 
 
@@ -5464,6 +5468,52 @@ SWIGEXPORT jlong JNICALL Java_bc_bcJNI_TurnApplication_1start_1turn_1get(JNIEnv 
 }
 
 
+SWIGEXPORT void JNICALL Java_bc_bcJNI_TurnApplication_1start_1turn_1error_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  struct bc_TurnApplication *arg1 = (struct bc_TurnApplication *) 0 ;
+  int32_t arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(struct bc_TurnApplication **)&jarg1; 
+  arg2 = (int32_t)jarg2; 
+  {
+    bc_TurnApplication_start_turn_error_set(arg1,arg2);
+    if (unlikely(bc_has_err())) {
+      char *result;
+      int8_t error = bc_get_last_err(&result);
+      {
+        SWIG_JavaException(jenv, error, result); return ; 
+      };
+    }
+  }
+}
+
+
+SWIGEXPORT jint JNICALL Java_bc_bcJNI_TurnApplication_1start_1turn_1error_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  struct bc_TurnApplication *arg1 = (struct bc_TurnApplication *) 0 ;
+  int32_t result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(struct bc_TurnApplication **)&jarg1; 
+  {
+    result = (int32_t)bc_TurnApplication_start_turn_error_get(arg1);
+    if (unlikely(bc_has_err())) {
+      char *result;
+      int8_t error = bc_get_last_err(&result);
+      {
+        SWIG_JavaException(jenv, error, result); return 0; 
+      };
+    }
+  }
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void JNICALL Java_bc_bcJNI_TurnApplication_1viewer_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
   struct bc_TurnApplication *arg1 = (struct bc_TurnApplication *) 0 ;
   bc_ViewerMessage *arg2 = (bc_ViewerMessage *) 0 ;
@@ -5957,23 +6007,27 @@ SWIGEXPORT void JNICALL Java_bc_bcJNI_delete_1AsteroidPattern(JNIEnv *jenv, jcla
 }
 
 
-SWIGEXPORT void JNICALL Java_bc_bcJNI_AsteroidPattern_1validate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_bc_bcJNI_AsteroidPattern_1validate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jboolean jresult = 0 ;
   struct bc_AsteroidPattern *arg1 = (struct bc_AsteroidPattern *) 0 ;
+  magicbool result;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
   arg1 = *(struct bc_AsteroidPattern **)&jarg1; 
   {
-    bc_AsteroidPattern_validate(arg1);
+    result = (magicbool)bc_AsteroidPattern_validate(arg1);
     if (unlikely(bc_has_err())) {
       char *result;
       int8_t error = bc_get_last_err(&result);
       {
-        SWIG_JavaException(jenv, error, result); return ; 
+        SWIG_JavaException(jenv, error, result); return 0; 
       };
     }
   }
+  jresult = (jshort)result; 
+  return jresult;
 }
 
 
@@ -6177,23 +6231,27 @@ SWIGEXPORT void JNICALL Java_bc_bcJNI_delete_1OrbitPattern(JNIEnv *jenv, jclass 
 }
 
 
-SWIGEXPORT void JNICALL Java_bc_bcJNI_OrbitPattern_1validate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_bc_bcJNI_OrbitPattern_1validate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jboolean jresult = 0 ;
   struct bc_OrbitPattern *arg1 = (struct bc_OrbitPattern *) 0 ;
+  magicbool result;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
   arg1 = *(struct bc_OrbitPattern **)&jarg1; 
   {
-    bc_OrbitPattern_validate(arg1);
+    result = (magicbool)bc_OrbitPattern_validate(arg1);
     if (unlikely(bc_has_err())) {
       char *result;
       int8_t error = bc_get_last_err(&result);
       {
-        SWIG_JavaException(jenv, error, result); return ; 
+        SWIG_JavaException(jenv, error, result); return 0; 
       };
     }
   }
+  jresult = (jshort)result; 
+  return jresult;
 }
 
 

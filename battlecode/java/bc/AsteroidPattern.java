@@ -39,8 +39,8 @@ public class AsteroidPattern {
     this(bcJNI.new_AsteroidPattern(seed, PlanetMap.getCPtr(mars_map), mars_map), true);
   }
 
-  public void validate() {
-    bcJNI.AsteroidPattern_validate(swigCPtr, this);
+  public boolean validate() {
+    return bcJNI.AsteroidPattern_validate(swigCPtr, this);
   }
 
   public boolean hasAsteroid(long round) {

@@ -497,7 +497,7 @@ void bc_PlanetMap_initial_units_set(bc_PlanetMap* this, bc_VecUnit* initial_unit
 /// Validates the map and checks some invariants are followed.
 /// 
 ///  * InvalidMapObject - the planet map is invalid.
-void bc_PlanetMap_validate(bc_PlanetMap* this);
+uint8_t bc_PlanetMap_validate(bc_PlanetMap* this);
 /// Whether a location is on the map.
 uint8_t bc_PlanetMap_on_map(bc_PlanetMap* this, bc_MapLocation* location);
 /// 
@@ -640,9 +640,13 @@ void delete_bc_TurnApplication(bc_TurnApplication* this);
 /// 
 bc_StartTurnMessage* bc_TurnApplication_start_turn_get(bc_TurnApplication* this);
 /// 
+int32_t bc_TurnApplication_start_turn_error_get(bc_TurnApplication* this);
+/// 
 bc_ViewerMessage* bc_TurnApplication_viewer_get(bc_TurnApplication* this);
 /// 
 void bc_TurnApplication_start_turn_set(bc_TurnApplication* this, bc_StartTurnMessage* start_turn);
+/// 
+void bc_TurnApplication_start_turn_error_set(bc_TurnApplication* this, int32_t start_turn_error);
 /// 
 void bc_TurnApplication_viewer_set(bc_TurnApplication* this, bc_ViewerMessage* viewer);
 /// 
@@ -692,7 +696,7 @@ void delete_bc_AsteroidPattern(bc_AsteroidPattern* this);
 /// Validates the asteroid pattern.
 /// 
 ///  * InvalidMapObject - the asteroid pattern is invalid.
-void bc_AsteroidPattern_validate(bc_AsteroidPattern* this);
+uint8_t bc_AsteroidPattern_validate(bc_AsteroidPattern* this);
 /// Whether there is an asteroid strike at the given round.
 uint8_t bc_AsteroidPattern_has_asteroid(bc_AsteroidPattern* this, uint32_t round);
 /// Get the asteroid strike at the given round.
@@ -730,7 +734,7 @@ void bc_OrbitPattern_center_set(bc_OrbitPattern* this, uint32_t center);
 /// Validates the orbit pattern.
 /// 
 ///  * InvalidMapObject - the orbit pattern is invalid.
-void bc_OrbitPattern_validate(bc_OrbitPattern* this);
+uint8_t bc_OrbitPattern_validate(bc_OrbitPattern* this);
 /// Get the duration of flight if the rocket were to take off from either planet on the given round.
 uint32_t bc_OrbitPattern_duration(bc_OrbitPattern* this, uint32_t round);
 /// Deserialize a OrbitPattern from a JSON string

@@ -39,8 +39,8 @@ public class PlanetMap {
     this(bcJNI.new_PlanetMap(), true);
   }
 
-  public void validate() {
-    bcJNI.PlanetMap_validate(swigCPtr, this);
+  public boolean validate() {
+    return bcJNI.PlanetMap_validate(swigCPtr, this);
   }
 
   public boolean onMap(MapLocation location) {

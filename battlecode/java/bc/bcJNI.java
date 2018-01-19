@@ -199,7 +199,7 @@ public class bcJNI {
   public final static native long VecUnit_get(long jarg1, VecUnit jarg1_, long jarg2);
   public final static native long new_PlanetMap();
   public final static native void delete_PlanetMap(long jarg1);
-  public final static native void PlanetMap_validate(long jarg1, PlanetMap jarg1_);
+  public final static native boolean PlanetMap_validate(long jarg1, PlanetMap jarg1_);
   public final static native boolean PlanetMap_onMap(long jarg1, PlanetMap jarg1_, long jarg2, MapLocation jarg2_);
   public final static native short PlanetMap_isPassableTerrainAt(long jarg1, PlanetMap jarg1_, long jarg2, MapLocation jarg2_);
   public final static native long PlanetMap_initialKarboniteAt(long jarg1, PlanetMap jarg1_, long jarg2, MapLocation jarg2_);
@@ -267,6 +267,8 @@ public class bcJNI {
   public final static native void delete_TurnApplication(long jarg1);
   public final static native void TurnApplication_start_turn_set(long jarg1, TurnApplication jarg1_, long jarg2, StartTurnMessage jarg2_);
   public final static native long TurnApplication_start_turn_get(long jarg1, TurnApplication jarg1_);
+  public final static native void TurnApplication_start_turn_error_set(long jarg1, TurnApplication jarg1_, int jarg2);
+  public final static native int TurnApplication_start_turn_error_get(long jarg1, TurnApplication jarg1_);
   public final static native void TurnApplication_viewer_set(long jarg1, TurnApplication jarg1_, long jarg2, ViewerMessage jarg2_);
   public final static native long TurnApplication_viewer_get(long jarg1, TurnApplication jarg1_);
   public final static native long new_InitialTurnApplication();
@@ -288,7 +290,7 @@ public class bcJNI {
   public final static native long bcAsteroidStrikeFromJson(String jarg1);
   public final static native long new_AsteroidPattern(int jarg1, long jarg2, PlanetMap jarg2_);
   public final static native void delete_AsteroidPattern(long jarg1);
-  public final static native void AsteroidPattern_validate(long jarg1, AsteroidPattern jarg1_);
+  public final static native boolean AsteroidPattern_validate(long jarg1, AsteroidPattern jarg1_);
   public final static native boolean AsteroidPattern_hasAsteroid(long jarg1, AsteroidPattern jarg1_, long jarg2);
   public final static native long AsteroidPattern_asteroid(long jarg1, AsteroidPattern jarg1_, long jarg2);
   public final static native long AsteroidPattern_clone(long jarg1, AsteroidPattern jarg1_);
@@ -297,7 +299,7 @@ public class bcJNI {
   public final static native long bcAsteroidPatternFromJson(String jarg1);
   public final static native long new_OrbitPattern(long jarg1, long jarg2, long jarg3);
   public final static native void delete_OrbitPattern(long jarg1);
-  public final static native void OrbitPattern_validate(long jarg1, OrbitPattern jarg1_);
+  public final static native boolean OrbitPattern_validate(long jarg1, OrbitPattern jarg1_);
   public final static native long OrbitPattern_duration(long jarg1, OrbitPattern jarg1_, long jarg2);
   public final static native String OrbitPattern_toJson(long jarg1, OrbitPattern jarg1_);
   public final static native void OrbitPattern_amplitude_set(long jarg1, OrbitPattern jarg1_, long jarg2);

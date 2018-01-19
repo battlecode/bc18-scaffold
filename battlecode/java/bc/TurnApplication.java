@@ -48,6 +48,14 @@ public class TurnApplication {
     return (cPtr == 0) ? null : new StartTurnMessage(cPtr, false);
   }
 
+  public void setStart_turn_error(int value) {
+    bcJNI.TurnApplication_start_turn_error_set(swigCPtr, this, value);
+  }
+
+  public int getStart_turn_error() {
+    return bcJNI.TurnApplication_start_turn_error_get(swigCPtr, this);
+  }
+
   public void setViewer(ViewerMessage value) {
     bcJNI.TurnApplication_viewer_set(swigCPtr, this, ViewerMessage.getCPtr(value), value);
   }

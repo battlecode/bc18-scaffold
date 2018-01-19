@@ -511,7 +511,7 @@ typedef struct bc_PlanetMap {} bc_PlanetMap;
     bc_PlanetMap();
     ~bc_PlanetMap();
     %newobject validate;
-    void validate();
+    magicbool validate();
     %newobject on_map;
     magicbool on_map(bc_MapLocation* location);
     %newobject is_passable_terrain_at;
@@ -667,6 +667,8 @@ typedef struct bc_TurnApplication {} bc_TurnApplication;
 
     bc_StartTurnMessage* start_turn;
 
+    int32_t start_turn_error;
+
     bc_ViewerMessage* viewer;
 }
 
@@ -709,7 +711,7 @@ typedef struct bc_AsteroidPattern {} bc_AsteroidPattern;
     bc_AsteroidPattern(uint16_t seed, bc_PlanetMap* mars_map);
     ~bc_AsteroidPattern();
     %newobject validate;
-    void validate();
+    magicbool validate();
     %newobject has_asteroid;
     magicbool has_asteroid(uint32_t round);
     %newobject asteroid;
@@ -731,7 +733,7 @@ typedef struct bc_OrbitPattern {} bc_OrbitPattern;
     bc_OrbitPattern(uint32_t amplitude, uint32_t period, uint32_t center);
     ~bc_OrbitPattern();
     %newobject validate;
-    void validate();
+    magicbool validate();
     %newobject duration;
     uint32_t duration(uint32_t round);
     %newobject to_json;

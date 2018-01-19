@@ -39,8 +39,8 @@ public class OrbitPattern {
     this(bcJNI.new_OrbitPattern(amplitude, period, center), true);
   }
 
-  public void validate() {
-    bcJNI.OrbitPattern_validate(swigCPtr, this);
+  public boolean validate() {
+    return bcJNI.OrbitPattern_validate(swigCPtr, this);
   }
 
   public long duration(long round) {
