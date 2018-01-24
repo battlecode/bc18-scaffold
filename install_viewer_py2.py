@@ -1,10 +1,12 @@
+from __future__ import print_function
 import os
 import json
 import zipfile
 import shutil
 import sys
 
-from urllib.request import urlretrieve, urlopen
+
+import urllib #import urlretrieve, urlopen
 
 #def downloadFile(url, outFile):
 #    urlretrieve(url, outFile)
@@ -19,7 +21,7 @@ def isNewer(new, original):
 def downloadProgress(count, blockSize, totalSize):
     if count % 1000 == 0:
         percentDone = float(count) * blockSize / totalSize * 100.0
-        print("%4.2f%%" % percentDone,end='\b\b\b\b\b\b',flush=True)
+        print("%4.2f%%" % percentDone,end='\b\b\b\b\b\b')
 
 def main():
     currentInstallFileName = "viewer_currentInstall.json"
@@ -52,7 +54,7 @@ def main():
         print("It looks like this is your first time installing the viewer. What system are you using?")
         for optionNum, optionName, actualName in possibleSystems:
             print("%s) %s" % (optionNum, optionName))
-        systemInp = input("> ")
+        systemInp = raw_input("> ")
         try:
             systemInp = int(systemInp)
             if systemInp <= 0 or systemInp > len(possibleSystems):
@@ -68,7 +70,7 @@ def main():
         
 
     versionFileUrl = versionAndChangeLogUrl + versionFileName
-    latestVersion =  urlopen(versionFileUrl).read().decode()
+    latestVersion =  urllib.urlopen(versionFileUrl).read().decode()
 
     print("Checking for updates...")
 
@@ -76,7 +78,7 @@ def main():
         print("There is a newer version available.\nCurrent version is: %s. The new version is %s." % (currentInfo['version'], latestVersion))
     else:
         print("No updates! Would you like to reinstall the viewer anyway?")
-    shouldDownload = input("Download? (Y/N) > ").lower() == "y"
+    shouldDownload = raw_input("Download? (Y/N) > ").lower() == "y"
     if shouldDownload:
         newestUrl = baseUrl + ("%s/%s.zip" % (latestVersion, currentInfo['system']))
         downloadLocation = os.path.join(directory, zipFileName)
@@ -85,7 +87,7 @@ def main():
             os.remove(downloadLocation)
             print("Deleted old archive.")
         print("Downloading new client... This could take a while.")
-        urlretrieve(newestUrl, downloadLocation, downloadProgress)
+        urllib.urlretrieve(newestUrl, downloadLocation, downloadProgress)
         print()
         print("Successfully downloaded files. ")
         outputDirectory = os.path.join(directory, viewerDirectory)
