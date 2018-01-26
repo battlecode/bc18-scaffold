@@ -69,6 +69,8 @@ class Game(object): # pylint: disable=too-many-instance-attributes
         self.player_logged = {}
         # Dict taking player id and giving amount of time left as float
         self.times = {}
+        # List of how many players per team are connected (red,blue).
+        self.connected_players = [0,0]
 
         self.disconnected = False
 
@@ -144,6 +146,10 @@ class Game(object): # pylint: disable=too-many-instance-attributes
 
     def get_player(self, client_id):
         return self.players[self.player_id2index(client_id)]
+
+    def player_connected(self, client_id):
+        index = self.player_id2index(client_id)
+        self.connected_players[index%2] = self.connected_players[index%2] + 1
 
     @property
     def num_log_in(self):
@@ -241,9 +247,9 @@ class Game(object): # pylint: disable=too-many-instance-attributes
             for player in sorted(self.players, key=_key):
                 p = player['player']
                 print('-- [{}{}] --'.format('e' if p.planet == bc.Planet.Earth else 'm', 'r' if p.team == bc.Team.Red else 'b'))
-                #logs = player['logger'].logs.getvalue()[-1000:].splitlines()[-5:]
-                #for line in logs:
-                #    print(line)
+                logs = player['logger'].logs.getvalue()[-1000:].splitlines()[-5:]
+                for line in logs:
+                    print(line)
 
         if self.extra_delay:
             import time
@@ -340,7 +346,25 @@ def create_receive_handler(game: Game, dockers, use_docker: bool,
             self.error = ""
             self.logged_in = False
             self.is_unix_stream = is_unix_stream
+            self.buffer_small = b''
+            self.buffer_large = []
+
             super(ReceiveHandler, self).__init__(*args, **kwargs)
+
+        def read_line(self):
+            while True:
+                if self.buffer_small:
+                    pos = self.buffer_small.find(b'\n')
+                    if pos != -1:
+                        ret = b''.join(self.buffer_large) + self.buffer_small[:pos]
+                        self.buffer_small = self.buffer_small[pos+1:]
+                        self.buffer_large = []
+                        return ret
+                    else:
+                        self.buffer_large.append(self.buffer_small)
+                self.buffer_small = self.request.recv(4096)
+                if not self.buffer_small:
+                    raise IOError("reached socket EOF before finding newline")
 
         def get_next_message(self) -> object:
             '''
@@ -355,42 +379,43 @@ def create_receive_handler(game: Game, dockers, use_docker: bool,
             recv_socket = self.request
             game = self.game
 
-            wrapped_socket = recv_socket.makefile('rwb', 1)
             logging.debug("Client %s: Waiting for next message", self.client_id)
             try:
-                data = next(wrapped_socket)
+                data = self.read_line()
             except (StopIteration, IOError):
                 print("{} has not sent message for {} seconds, assuming they're dead".format(
                     self.game.get_player(self.client_id)['player'],
                     TIMEOUT
                 ))
-                wrapped_socket.close()
                 recv_socket.close()
                 if bc.Team.Red == self.game.get_player(self.client_id)['player'].team:
                     self.game.winner = 'player2'
                 elif bc.Team.Blue == self.game.get_player(self.client_id)['player'].team:
                     self.game.winner = 'player1'
                 else:
-                    print("Determining match by coin toss.")
-                    self.game.winner = 'player1' if random.random() > 0.5 else 'player2'
+                    if self.game.connected_players[0] == self.game.connected_players[1]:
+                        print("Determining match by coin toss.")
+                        self.game.winner = 'player1' if random.random() > 0.5 else 'player2'
+                    else:
+                        self.game.winner = 'player1' if self.game.connected_players[0] > self.game.connected_players[1] else 'player2'
                 self.game.disconnected = True
                 self.game.game_over = True
                 raise TimeoutError()
             except KeyboardInterrupt:
-                wrapped_socket.close()
                 recv_socket.close()
                 if bc.Team.Red == self.game.get_player(self.client_id)['player'].team:
                     self.game.winner = 'player2'
                 elif bc.Team.Blue == self.game.get_player(self.client_id)['player'].team:
                     self.game.winner = 'player1'
                 else:
-                    print("Determining match by coin toss.")
-                    self.game.winner = 'player1' if random.random() > 0.5 else 'player2'
+                    if self.game.connected_players[0] == self.game.connected_players[1]:
+                        print("Determining match by coin toss.")
+                        self.game.winner = 'player1' if random.random() > 0.5 else 'player2'
+                    else:
+                        self.game.winner = 'player1' if self.game.connected_players[0] > self.game.connected_players[1] else 'player2'
                 self.game.disconnected = True
                 self.game.game_over = True
                 raise KeyboardInterrupt()
-            finally:
-                wrapped_socket.close()
 
             data = data.decode("utf-8").strip()
             return data
@@ -420,11 +445,9 @@ def create_receive_handler(game: Game, dockers, use_docker: bool,
             logging.debug("Client %s: Sending message %s", self.client_id,
                           encoded_message)
 
-            wrapped_socket = send_socket.makefile('rwb', 1)
             try:
-                wrapped_socket.write(encoded_message)
+                self.request.sendall(encoded_message)
             except IOError:
-                wrapped_socket.close()
                 send_socket.close()
                 print("{} has not accepted message for {} seconds, assuming they're dead".format(
                     [p for p in self.game.players if p['id'] == self.client_id][0]['player'],
@@ -435,26 +458,29 @@ def create_receive_handler(game: Game, dockers, use_docker: bool,
                 elif bc.Team.Blue ==self.game.get_player(self.client_id)['player'].team:
                     self.game.winner = 'player1'
                 else:
-                    print("Determining match by coin toss.")
-                    self.game.winner = 'player1' if random.random() > 0.5 else 'player2'
+                    if self.game.connected_players[0] == self.game.connected_players[1]:
+                        print("Determining match by coin toss.")
+                        self.game.winner = 'player1' if random.random() > 0.5 else 'player2'
+                    else:
+                        self.game.winner = 'player1' if self.game.connected_players[0] > self.game.connected_players[1] else 'player2'
                 self.game.disconnected = True
                 self.game.game_over = True
                 raise TimeoutError()
             except KeyboardInterrupt:
-                wrapped_socket.close()
                 send_socket.close()
                 if bc.Team.Red == self.game.get_player(self.client_id)['player'].team:
                     self.game.winner = 'player2'
                 elif bc.Team.Blue ==self.game.get_player(self.client_id)['player'].team:
                     self.game.winner = 'player1'
                 else:
-                    print("Determining match by coin toss.")
-                    self.game.winner = 'player1' if random.random() > 0.5 else 'player2'
+                    if self.game.connected_players[0] == self.game.connected_players[1]:
+                        print("Determining match by coin toss.")
+                        self.game.winner = 'player1' if random.random() > 0.5 else 'player2'
+                    else:
+                        self.game.winner = 'player1' if self.game.connected_players[0] > self.game.connected_players[1] else 'player2'
                 self.game.disconnected = True
                 self.game.game_over = True
                 raise KeyboardInterrupt()
-            finally:
-                wrapped_socket.close()
             return
 
         def message(self, state_diff):
@@ -506,6 +532,7 @@ def create_receive_handler(game: Game, dockers, use_docker: bool,
                     logging.info("Client %s: logged in succesfully", self.client_id)
                     self.logged_in = True
                     self.client_id = verify_out
+                    self.game.player_connected(self.client_id)
                     self.game.get_player(self.client_id)['built_successfully'] = True
 
                 log_success = self.message("")
@@ -564,11 +591,13 @@ def create_receive_handler(game: Game, dockers, use_docker: bool,
                     my_sandbox.unpause()
 
                     start_time = time.perf_counter()
+                    start_time_python = time.process_time()
                     self.send_message(start_turn_msg)
                     data = self.get_next_message()
+                    end_time_python = time.process_time()
                     end_time = time.perf_counter()
 
-                    diff_time = end_time-start_time
+                    diff_time = (end_time - start_time) - (end_time_python - start_time_python)
 
                     my_sandbox.pause()
 
@@ -584,8 +613,11 @@ def create_receive_handler(game: Game, dockers, use_docker: bool,
                         elif bc.Team.Blue ==self.game.get_player(self.client_id)['player'].team:
                             self.game.winner = 'player1'
                         else:
-                            print("Determining match by coin toss.")
-                            self.game.winner = 'player1' if random.random() > 0.5 else 'player2'
+                            if self.game.connected_players[0] == self.game.connected_players[1]:
+                                print("Determining match by coin toss.")
+                                self.game.winner = 'player1' if random.random() > 0.5 else 'player2'
+                            else:
+                                self.game.winner = 'player1' if self.game.connected_players[0] > self.game.connected_players[1] else 'player2'
                         self.game.disconnected = True
                         self.game.game_over = True
 
