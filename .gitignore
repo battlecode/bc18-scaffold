@@ -2,3 +2,7 @@ working_dir
 replay*
 viewer_latest*
 viewer_currentInstall.json
+/battlecode-manager/**
+/battlecode/**
+.idea
+
