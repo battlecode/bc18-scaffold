@@ -2,7 +2,7 @@
 
 docker stop $(docker ps -q)
 docker container rm $(docker container ls -aq)
-docker volume rm $(docker volume ls -q)$
+docker volume rm $(docker volume ls -q)
 docker volume prune
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
